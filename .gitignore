@@ -14,3 +14,9 @@ hs_err_pid*
 \.idea/
 
 BlackAndWhite\.iml
+
+\.gradle/
+
+*.MF
+
+html/build/gwt/cache/gwt-unitCache/
