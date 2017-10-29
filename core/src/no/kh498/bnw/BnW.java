@@ -4,13 +4,11 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.PolygonSprite;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import no.kh498.bnw.game.HexColor;
-import no.kh498.bnw.game.HexType;
+import no.kh498.bnw.game.HexagonData;
+import no.kh498.bnw.game.Renderer;
 import org.codetome.hexameter.core.api.*;
 import rx.Observable;
 
@@ -19,20 +17,17 @@ import static org.codetome.hexameter.core.api.HexagonalGridLayout.HEXAGONAL;
 
 public class BnW extends ApplicationAdapter {
 
-    private SpriteBatch batch;
-    private Texture img;
-
     private static BnW instance;
+    private BitmapFont font;
 
     public static BnW getInst() {
         return instance;
     }
 
-    private static final int GRID_HEIGHT = 5;
-    private static final int GRID_WIDTH = 5;
+    private static final int GRID_RADIUS = 9;
     private static final HexagonalGridLayout GRID_LAYOUT = HEXAGONAL;
     private static final HexagonOrientation ORIENTATION = FLAT_TOP;
-    private static final double RADIUS = 50;
+    private static final double RADIUS = 30;
 
     private HexagonalGrid grid;
     private HexagonalGridCalculator calc;
@@ -40,35 +35,41 @@ public class BnW extends ApplicationAdapter {
     private PolygonSprite polySprite;
     private PolygonSpriteBatch polyBatch;
     private OrthographicCamera camera;
-    private Vector2 touch;
+
+    private Renderer renderer;
+
+    private static final HexagonData DEFAULT_DATA = new HexagonData();
 
     @Override
     public void create() {
         instance = this;
-//        this.batch = new SpriteBatch();
-//        this.img = HexType.HALF.getTexture();
 
-        // ...
+        /* Hexagon */
         final HexagonalGridBuilder builder =
-            new HexagonalGridBuilder().setGridHeight(GRID_HEIGHT).setGridWidth(GRID_WIDTH).setGridLayout(GRID_LAYOUT)
+            new HexagonalGridBuilder().setGridHeight(GRID_RADIUS).setGridWidth(GRID_RADIUS).setGridLayout(GRID_LAYOUT)
                                       .setOrientation(ORIENTATION).setRadius(RADIUS);
 
         this.grid = builder.build();
         this.calc = builder.buildCalculatorFor(this.grid);
 
+//        final Observable<Hexagon<HexagonData>> hexagons = this.grid.getHexagons();
+//        hexagons.forEach(hexagon -> {
+//            hexagon.setSatelliteData(new HexagonData());
+//        });
+
+
+        /* Other */
+
 
         this.camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         this.camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        this.touch = new Vector2();
-//        Gdx.input.setInputProcessor(new GestureDetector(this));
+
+        this.renderer = new Renderer(this.camera);
 
         this.polyBatch = new PolygonSpriteBatch(); // To assign at the beginning
-
         this.polyBatch.setProjectionMatrix(this.camera.combined);
 
-
-//        final float[] vertices = new float[] {10, 10, 100, 10, 200, 200, 10, 100};
-
+        this.font = new BitmapFont();
 
     }
 
@@ -77,38 +78,23 @@ public class BnW extends ApplicationAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        //noinspection unchecked
+        final Observable<Hexagon<HexagonData>> hexagons = this.grid.getHexagons();
+        hexagons.forEach(hexagon -> {
+            final HexagonData data = hexagon.getSatelliteData().orElse(DEFAULT_DATA);
+            data.type.render(this.renderer, data.color, hexagon);
+        });
+        this.renderer.flush();
 
         this.polyBatch.begin();
-
-        final Observable<Hexagon<?>> hexagons = this.grid.getHexagons();
-        hexagons.forEach(hexagon -> {
-            HexType.HALF.render(this.polyBatch, HexColor.GRAY, hexagon);
-
-//            this.polySprite.draw(this.polyBatch);
-        });
-
-
+        this.font.draw(this.polyBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, this.font.getLineHeight());
         this.polyBatch.end();
 
-//        this.shapeRenderer.begin();
 
-
-//        this.grid.ge this.board.render(this.batch);
-
-//        this.batch.setColor(HexColor.WHITE.getShade());
-//        this.batch.draw(this.img, 0, 0);
-//        this.batch.setColor(HexColor.GRAY.getShade());
-//        this.batch.draw(this.img, 128, 0);
-//        this.batch.setColor(HexColor.BLACK.getShade());
-//        this.batch.draw(this.img, 256, 0);
-//        this.shapeRenderer.end();
-//        this.batch.setColor(HexColor.RESET.getShade());
     }
 
 
     @Override
     public void dispose() {
-        this.batch.dispose();
-        this.img.dispose();
     }
 }

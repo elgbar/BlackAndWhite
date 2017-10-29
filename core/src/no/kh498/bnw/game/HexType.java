@@ -1,12 +1,6 @@
 package no.kh498.bnw.game;
 
-import com.badlogic.gdx.graphics.g2d.PolygonRegion;
-import com.badlogic.gdx.graphics.g2d.PolygonSprite;
-import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.utils.FloatArray;
-import com.badlogic.gdx.utils.ShortArray;
 import org.codetome.hexameter.core.api.Hexagon;
 import org.codetome.hexameter.core.api.Point;
 
@@ -53,25 +47,13 @@ public enum HexType {
     }
 
 
-    public void render(final PolygonSpriteBatch batch, final HexColor color, final Hexagon<?> hexagon) {
-
-//        final TextureRegion textureRegion = color.shade(1f);
-//        final float[] vertices = toRenderPoints(points);
-//        for (int i = 0; i < points.size(); i++) {
-//            final Point point = points.get(i);
-//            System.out.print("point " + i + " [" + point.getCoordinateX() + ", " + point.getCoordinateY() + "] ");
-//        }
-//        System.out.println();
-//        System.out.println(Arrays.toString(vertices));
-
-
+    public void render(final Renderer renderer, final HexColor color, final Hexagon<?> hexagon) {
         final Point center = Point.fromPosition(hexagon.getCenterX(), hexagon.getCenterY());
-
         final List<Point> points = hexagon.getPoints();
         points.add(center);
 
         for (final Surface sur : this.surfaces) {
-            sur.render(batch, color, points);
+            sur.getVerities(renderer, color, points);
         }
     }
 
@@ -93,6 +75,12 @@ public enum HexType {
         private final int v3;
         private final float shade;
 
+        /**
+         * @param v1
+         * @param v2
+         * @param v3
+         * @param shade
+         */
         Surface(final int v1, final int v2, final int v3, final float shade) {
 
             this.v1 = v1;
@@ -105,7 +93,7 @@ public enum HexType {
             arr.addAll((float) p.getCoordinateX(), (float) p.getCoordinateY());
         }
 
-        void render(final PolygonSpriteBatch batch, final HexColor color, final List<Point> points) {
+        void getVerities(final Renderer renderer, final HexColor color, final List<Point> points) {
 
             final FloatArray floatArray = new FloatArray();
 
@@ -115,13 +103,7 @@ public enum HexType {
 
             final float[] vertices = floatArray.toArray();
 
-            final EarClippingTriangulator triangulator = new EarClippingTriangulator();
-            final ShortArray triangleIndices = triangulator.computeTriangles(vertices);
-            final TextureRegion region = color.shade(this.shade);
-
-            final PolygonRegion polyReg = new PolygonRegion(region, vertices, triangleIndices.toArray());
-
-            new PolygonSprite(polyReg).draw(batch);
+            renderer.drawTriangle(color.shade(this.shade).toFloatBits(), vertices);
         }
     }
 }
