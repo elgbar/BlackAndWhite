@@ -12,8 +12,8 @@ public class OffsetCoord {
 
     public final int col;
     public final int row;
-    public static int EVEN = 1;
-    public static int ODD = -1;
+    public static final int EVEN = 1;
+    public static final int ODD = -1;
 
     public static OffsetCoord qOffsetFromCube(final int offset, final Hex h) {
         final int col = h.q;

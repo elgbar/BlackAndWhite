@@ -1,4 +1,4 @@
-package no.kh498.bnw;
+package no.kh498.bnw.game;
 
 import com.badlogic.gdx.graphics.Color;
 
@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
  */
 public enum HexColor {
 
+    RESET(1f),
     WHITE(1f),
     GRAY(0.4f),
     BLACK(0.15f);

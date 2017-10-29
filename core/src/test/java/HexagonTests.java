@@ -107,9 +107,9 @@ public class HexagonTests {
 
     public static void testLayout() {
         final Hex h = new Hex(3, 4, -7);
-        final Layout flat = new Layout(Layout.flat, new Point(10, 15), new Point(35, 71));
+        final Layout flat = new Layout(Layout.FLAT, new Point(10, 15), new Point(35, 71));
         HexagonTests.equalHex("layout", h, FractionalHex.hexRound(Layout.pixelToHex(flat, Layout.hexToPixel(flat, h))));
-        final Layout pointy = new Layout(Layout.pointy, new Point(10, 15), new Point(35, 71));
+        final Layout pointy = new Layout(Layout.POINTY, new Point(10, 15), new Point(35, 71));
         HexagonTests
             .equalHex("layout", h, FractionalHex.hexRound(Layout.pixelToHex(pointy, Layout.hexToPixel(pointy, h))));
     }

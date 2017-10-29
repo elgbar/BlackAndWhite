@@ -1,4 +1,4 @@
-package no.kh498.bnw;
+package no.kh498.bnw.game;
 
 import com.badlogic.gdx.graphics.Texture;
 

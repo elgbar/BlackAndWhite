@@ -7,7 +7,14 @@ import java.util.ArrayList;
  */
 public class Hex {
 
+    public Hex(final int q, final int r) {
+        this(q, r, -q - r);
+    }
+
     public Hex(final int q, final int r, final int s) {
+        if (q + r + s != 0) {
+            throw new IllegalArgumentException("q + r + s != 0");
+        }
         this.q = q;
         this.r = r;
         this.s = s;
