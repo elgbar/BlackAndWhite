@@ -8,8 +8,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.PolygonSprite;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import no.kh498.bnw.game.HexagonData;
+import no.kh498.bnw.game.InputListener;
 import no.kh498.bnw.game.Renderer;
 import org.codetome.hexameter.core.api.*;
+import org.codetome.hexameter.core.internal.impl.HexagonalGridImpl;
 import rx.Observable;
 
 import static org.codetome.hexameter.core.api.HexagonOrientation.FLAT_TOP;
@@ -24,13 +26,21 @@ public class BnW extends ApplicationAdapter {
         return instance;
     }
 
+    public static HexagonalGrid getGrid() {
+        return grid;
+    }
+
+    public static HexagonalGridCalculator getCalc() {
+        return calc;
+    }
+
     private static final int GRID_RADIUS = 9;
     private static final HexagonalGridLayout GRID_LAYOUT = HEXAGONAL;
     private static final HexagonOrientation ORIENTATION = FLAT_TOP;
     private static final double RADIUS = 30;
 
-    private HexagonalGrid grid;
-    private HexagonalGridCalculator calc;
+    private static HexagonalGrid<HexagonData> grid;
+    private static HexagonalGridCalculator<HexagonData> calc;
 
     private PolygonSprite polySprite;
     private PolygonSpriteBatch polyBatch;
@@ -38,30 +48,28 @@ public class BnW extends ApplicationAdapter {
 
     private Renderer renderer;
 
-    private static final HexagonData DEFAULT_DATA = new HexagonData();
+    public static final HexagonData DEFAULT_DATA = new HexagonData();
 
     @Override
     public void create() {
         instance = this;
 
         /* Hexagon */
-        final HexagonalGridBuilder builder =
-            new HexagonalGridBuilder().setGridHeight(GRID_RADIUS).setGridWidth(GRID_RADIUS).setGridLayout(GRID_LAYOUT)
-                                      .setOrientation(ORIENTATION).setRadius(RADIUS);
+        final HexagonalGridBuilder<HexagonData> builder = new HexagonalGridBuilder<>();
+        builder.setGridHeight(GRID_RADIUS);
+        builder.setGridWidth(GRID_RADIUS);
+        builder.setGridLayout(GRID_LAYOUT);
+        builder.setOrientation(ORIENTATION);
+        builder.setRadius(RADIUS);
+        builder.getHexagonDataStorage();
 
-        this.grid = builder.build();
-        this.calc = builder.buildCalculatorFor(this.grid);
+        grid = new HexagonalGridImpl<>(builder);
 
-//        final Observable<Hexagon<HexagonData>> hexagons = this.grid.getHexagons();
-//        hexagons.forEach(hexagon -> {
-//            hexagon.setSatelliteData(new HexagonData());
-//        });
-
+        calc = builder.buildCalculatorFor(grid);
 
         /* Other */
 
-
-        this.camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         this.renderer = new Renderer(this.camera);
@@ -71,6 +79,7 @@ public class BnW extends ApplicationAdapter {
 
         this.font = new BitmapFont();
 
+        Gdx.input.setInputProcessor(new InputListener());
     }
 
     @Override
@@ -79,7 +88,7 @@ public class BnW extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //noinspection unchecked
-        final Observable<Hexagon<HexagonData>> hexagons = this.grid.getHexagons();
+        final Observable<Hexagon<HexagonData>> hexagons = grid.getHexagons();
         hexagons.forEach(hexagon -> {
             final HexagonData data = hexagon.getSatelliteData().orElse(DEFAULT_DATA);
             data.type.render(this.renderer, data.color, hexagon);
@@ -89,10 +98,7 @@ public class BnW extends ApplicationAdapter {
         this.polyBatch.begin();
         this.font.draw(this.polyBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, this.font.getLineHeight());
         this.polyBatch.end();
-
-
     }
-
 
     @Override
     public void dispose() {

@@ -1,42 +1,13 @@
 package no.kh498.bnw.game;
 
-import org.codetome.hexameter.core.api.contract.SatelliteData;
+import org.codetome.hexameter.core.api.defaults.DefaultSatelliteData;
 
 /**
  * @author karl henrik
  */
-public class HexagonData implements SatelliteData {
+public class HexagonData extends DefaultSatelliteData {
 
     public HexColor color = HexColor.GRAY;
     public HexType type = HexType.CUBE;
 
-    @Override
-    public boolean isPassable() {
-        return false;
-    }
-
-    @Override
-    public void setPassable(final boolean passable) {
-
-    }
-
-    @Override
-    public boolean isOpaque() {
-        return false;
-    }
-
-    @Override
-    public void setOpaque(final boolean opaque) {
-
-    }
-
-    @Override
-    public double getMovementCost() {
-        return 0;
-    }
-
-    @Override
-    public void setMovementCost(final double movementCost) {
-
-    }
 }
