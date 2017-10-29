@@ -5,13 +5,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.PolygonSprite;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import no.kh498.bnw.game.HexagonData;
 import no.kh498.bnw.game.InputListener;
 import no.kh498.bnw.game.Renderer;
 import org.codetome.hexameter.core.api.*;
-import org.codetome.hexameter.core.internal.impl.HexagonalGridImpl;
 import rx.Observable;
 
 import static org.codetome.hexameter.core.api.HexagonOrientation.FLAT_TOP;
@@ -42,7 +40,6 @@ public class BnW extends ApplicationAdapter {
     private static HexagonalGrid<HexagonData> grid;
     private static HexagonalGridCalculator<HexagonData> calc;
 
-    private PolygonSprite polySprite;
     private PolygonSpriteBatch polyBatch;
     private OrthographicCamera camera;
 
@@ -63,12 +60,11 @@ public class BnW extends ApplicationAdapter {
         builder.setRadius(RADIUS);
         builder.getHexagonDataStorage();
 
-        grid = new HexagonalGridImpl<>(builder);
+        grid = builder.build();
 
         calc = builder.buildCalculatorFor(grid);
 
         /* Other */
-
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 

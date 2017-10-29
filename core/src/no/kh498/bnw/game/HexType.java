@@ -5,11 +5,12 @@ import org.codetome.hexameter.core.api.Hexagon;
 import org.codetome.hexameter.core.api.Point;
 
 import java.util.List;
+import java.util.WeakHashMap;
 
 /**
  * @author karl henrik
  */
-@SuppressWarnings("GwtInconsistentSerializableClass")
+@SuppressWarnings({"GwtInconsistentSerializableClass", "NonJREEmulationClassesInClientCode"})
 public enum HexType {
 
     //@formatter:off
@@ -32,10 +33,10 @@ public enum HexType {
          new Surface(6, 1, 2, 1f),
          new Surface(6, 3, 2, 1f)),
 
-    CUBE(new Surface(6, 5, 0, 0.83f),
-         new Surface(6, 0, 1, 0.83f),
-         new Surface(6, 5, 4, 0.63f),
-         new Surface(6, 4, 3, 0.63f),
+    CUBE(new Surface(6, 5, 0, 0.63f),
+         new Surface(6, 0, 1, 0.63f),
+         new Surface(6, 5, 4, 0.83f),
+         new Surface(6, 4, 3, 0.83f),
          new Surface(6, 1, 2, 1f),
          new Surface(6, 3, 2, 1f));
    //@formatter:on
@@ -46,11 +47,19 @@ public enum HexType {
         this.surfaces = surfaces;
     }
 
+    WeakHashMap<Hexagon<HexagonData>, List<Point>> cache = new WeakHashMap<>();
 
-    public void render(final Renderer renderer, final HexColor color, final Hexagon<?> hexagon) {
-        final Point center = Point.fromPosition(hexagon.getCenterX(), hexagon.getCenterY());
-        final List<Point> points = hexagon.getPoints();
-        points.add(center);
+    public void render(final Renderer renderer, final HexColor color, final Hexagon<HexagonData> hexagon) {
+        final List<Point> points;
+        if (!this.cache.containsKey(hexagon)) {
+            final Point center = Point.fromPosition(hexagon.getCenterX(), hexagon.getCenterY());
+            points = hexagon.getPoints();
+            points.add(center);
+            this.cache.put(hexagon, points);
+        }
+        else {
+            points = this.cache.get(hexagon);
+        }
 
         for (final Surface sur : this.surfaces) {
             sur.getVerities(renderer, color, points);
@@ -77,12 +86,19 @@ public enum HexType {
 
         /**
          * @param v1
+         *     The first of the index vertex in the list
          * @param v2
+         *     The second of the index vertex in the list
          * @param v3
+         *     The third of the index vertex in the list
          * @param shade
+         *     How light the shade of the color should be, 1 is max 0 is min
          */
         Surface(final int v1, final int v2, final int v3, final float shade) {
 
+            if (shade < 0 || shade > 1) {
+                throw new IllegalArgumentException("The shade must be between 1 and 0");
+            }
             this.v1 = v1;
             this.v2 = v2;
             this.v3 = v3;
