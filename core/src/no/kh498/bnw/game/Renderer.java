@@ -93,7 +93,7 @@ public class Renderer implements Disposable {
         final int vertexCount = (this.idx / NUM_COMPONENTS);
 
         //update the camera with our Y-up coordiantes
-//        this.cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        this.cam.setToOrtho(true, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         //start the shader before setting any uniforms
         this.shader.begin();
