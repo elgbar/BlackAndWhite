@@ -9,12 +9,16 @@ import java.util.HashMap;
  */
 @SuppressWarnings("GwtInconsistentSerializableClass")
 public enum HexColor {
-    WHITE(0.8f, 0.8f, 0.8f),
-    GRAY(0.4f, 0.4f, 0.4f),
-    BLACK(0.15f, 0.15f, 0.15f);
+    WHITE(0.8f),
+    GRAY(0.4f),
+    BLACK(0.25f);
 
     private final Color shade;
     private final HashMap<Float, Color> ColorCache = new HashMap<>();
+
+    HexColor(final float shade) {
+        this(shade, shade, shade);
+    }
 
     HexColor(final float r, final float g, final float b) {
         this.shade = new Color(r, g, b, 1f);

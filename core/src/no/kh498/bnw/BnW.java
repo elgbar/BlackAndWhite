@@ -87,7 +87,7 @@ public class BnW extends ApplicationAdapter {
         final Hexagon<HexagonData> hex = HexagonData.getHexagon(Gdx.input.getX(), Gdx.input.getY());
         if (hex != null) {
             final HexagonData data = HexagonData.getData(hex);
-            hexInfo = "Player: " + data.color + " Level: " + data.type.level;
+            hexInfo = data.color + " level " + data.type.level;
         }
 
         polyBatch.begin();
