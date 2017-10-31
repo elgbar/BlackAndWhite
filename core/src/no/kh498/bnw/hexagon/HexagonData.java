@@ -1,4 +1,4 @@
-package no.kh498.bnw.game;
+package no.kh498.bnw.hexagon;
 
 import org.codetome.hexameter.core.api.defaults.DefaultSatelliteData;
 

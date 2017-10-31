@@ -1,4 +1,4 @@
-package no.kh498.bnw.game;
+package no.kh498.bnw.hexagon;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -17,9 +17,6 @@ public class InputListener implements InputProcessor {
     private int windowedHeight = -1;
     private int windowedWidth = -1;
 
-    private int fullscreenHeight = -1;
-    private int fullscreenWidth = -1;
-
     @Override
     public boolean keyDown(final int keycode) {
         if (Input.Keys.ESCAPE == keycode) {
@@ -31,13 +28,10 @@ public class InputListener implements InputProcessor {
             if (this.windowedHeight == -1 && this.windowedWidth == -1) {
                 this.windowedHeight = Gdx.graphics.getHeight();
                 this.windowedWidth = Gdx.graphics.getWidth();
-                this.fullscreenHeight = Gdx.graphics.getDisplayMode().height;
-                this.fullscreenWidth = Gdx.graphics.getDisplayMode().width;
             }
 
-
             if (!Gdx.graphics.isFullscreen()) {
-                BnW.updateResolution(this.fullscreenWidth, this.fullscreenHeight);
+                BnW.updateResolution(Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
                 Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
             }
             else {
@@ -108,17 +102,12 @@ public class InputListener implements InputProcessor {
         final Hexagon<HexagonData> hex =
             (Hexagon<HexagonData>) BnW.getGrid().getByPixelCoordinate(screenX, screenY).orElse(null);
         if (hex != null) {
-//            System.out.println(
-//                "Processed: " + screenX + ", " + screenY + " | hex to coord: " + hex.getCenterX() + ", " +
-//                hex.getCenterY());
-
             final HexagonData data = hex.getSatelliteData().orElse(new HexagonData());
             data.color = BnW.color;
             data.type = BnW.type;
             hex.setSatelliteData(data);
             return true;
         }
-//        System.out.println("not processed: " + screenX + ", " + screenY);
         return false;
     }
 }
