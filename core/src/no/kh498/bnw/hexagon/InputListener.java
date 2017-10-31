@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import no.kh498.bnw.BnW;
-import no.kh498.bnw.game.Player;
 import org.codetome.hexameter.core.api.Hexagon;
 
 /**
@@ -51,22 +50,10 @@ public class InputListener implements InputProcessor {
 
     @Override
     public boolean keyTyped(final char character) {
-        int ordinal;
-        switch (character) {
-            case 'c':
-                ordinal = BnW.color.ordinal() + 1;
-                if (ordinal >= HexColor.values().length) {
-                    ordinal = 0;
-                }
 
-                BnW.color = HexColor.values()[ordinal];
-                return true;
-            case 't':
-                ordinal = BnW.type.ordinal() + 1;
-                if (ordinal >= HexType.values().length) {
-                    ordinal = 0;
-                }
-                BnW.type = HexType.values()[ordinal];
+        switch (character) {
+            case 'e':
+                BnW.getGame().endTurn();
                 return true;
             default:
                 return false;
@@ -101,11 +88,10 @@ public class InputListener implements InputProcessor {
     }
 
     private boolean changeHex(final int screenX, final int screenY) {
-        final Hexagon<HexagonData> hex =
-            (Hexagon<HexagonData>) BnW.getGrid().getByPixelCoordinate(screenX, screenY).orElse(null);
+        //noinspection unchecked
+        final Hexagon<HexagonData> hex = HexagonData.getHexagon(screenX, screenY);
         if (hex != null) {
-            final Player player = BnW.getGame().getPlayerHandler().getPlayer(BnW.color);
-            player.makeMove(hex);
+            BnW.getGame().getPlayerHandler().makeMove(hex);
             return true;
         }
         return false;

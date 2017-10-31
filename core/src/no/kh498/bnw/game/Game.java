@@ -18,4 +18,12 @@ public class Game {
     public PlayerHandler getPlayerHandler() {
         return this.playerHandler;
     }
+
+    public void endTurn() {
+        this.playerHandler.endTurn();
+    }
+
+    public Player getCurrentPlayer() {
+        return this.playerHandler.getCurrentPlayer();
+    }
 }

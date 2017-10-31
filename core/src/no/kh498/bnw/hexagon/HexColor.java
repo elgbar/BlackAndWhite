@@ -9,7 +9,7 @@ import java.util.HashMap;
  */
 @SuppressWarnings("GwtInconsistentSerializableClass")
 public enum HexColor {
-    WHITE(1f, 1f, 1f),
+    WHITE(0.8f, 0.8f, 0.8f),
     GRAY(0.4f, 0.4f, 0.4f),
     BLACK(0.15f, 0.15f, 0.15f);
 
@@ -24,7 +24,7 @@ public enum HexColor {
      * Get a shade of a certain color, the method is lazy so if a percent is called once the shade is cached
      *
      * @param percent
-     *     The percent of light to get (num 0-1)
+     *     The percent of light to getData (num 0-1)
      *
      * @return A shade of a color
      */

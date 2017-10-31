@@ -86,17 +86,13 @@ public enum HexType {
         this.surfaces = surfaces;
     }
 
-    public boolean canChange() {
-        return !(this.level == 0 || this.level == levels.length - 1);
-    }
-
     public boolean shouldChangeColor() {
         return this.level == 1;
     }
 
     public HexType getPrevLevel() {
         //ensure no exception
-        if (!canChange() || shouldChangeColor()) {
+        if (this.level <= 1) {
             return this;
         }
         return levels[this.level - 1];
@@ -104,7 +100,7 @@ public enum HexType {
 
     public HexType getNextLevel() {
         //ensure no exception
-        if (!canChange()) {
+        if (this.level + 1 >= levels.length) {
             return this;
         }
         return levels[this.level + 1];

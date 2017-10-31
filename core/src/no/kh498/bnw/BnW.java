@@ -2,13 +2,18 @@ package no.kh498.bnw;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import no.kh498.bnw.game.Game;
-import no.kh498.bnw.hexagon.*;
-import org.codetome.hexameter.core.api.*;
+import no.kh498.bnw.game.world.World;
+import no.kh498.bnw.game.world.WorldHandler;
+import no.kh498.bnw.hexagon.HexagonData;
+import no.kh498.bnw.hexagon.InputListener;
+import no.kh498.bnw.hexagon.Renderer;
+import org.codetome.hexameter.core.api.Hexagon;
 import rx.Observable;
 
 public class BnW extends ApplicationAdapter {
@@ -21,32 +26,22 @@ public class BnW extends ApplicationAdapter {
         return instance;
     }
 
+    public static World getWorld() {
+        return worldHandler.getWorld();
+    }
+
+    public static WorldHandler getWorldHandler() {
+        return worldHandler;
+    }
+
     public static Game getGame() { return game;}
 
-    public static HexagonalGrid getGrid() {
-        return grid;
-    }
-
-    public static HexagonalGridCalculator getCalc() {
-        return calc;
-    }
-
-    private static final int GRID_RADIUS = 5;
-    private static final HexagonalGridLayout GRID_LAYOUT = HexagonalGridLayout.HEXAGONAL;
-    private static final HexagonOrientation ORIENTATION = HexagonOrientation.FLAT_TOP;
-    private static final double RADIUS = 40;
-
-    private static HexagonalGrid<HexagonData> grid;
-    private static HexagonalGridCalculator<HexagonData> calc;
+    private static WorldHandler worldHandler;
 
     private static PolygonSpriteBatch polyBatch;
     private static OrthographicCamera camera;
 
     private Renderer renderer;
-
-    //TODO remove, only used for testing
-    public static HexType type = HexType.CUBE;
-    public static HexColor color = HexColor.WHITE;
 
     public static final HexagonData DEFAULT_DATA = new HexagonData();
 
@@ -60,18 +55,7 @@ public class BnW extends ApplicationAdapter {
         instance = this;
         game = new no.kh498.bnw.game.Game();
 
-        /* Hexagon */
-        final HexagonalGridBuilder<HexagonData> builder = new HexagonalGridBuilder<>();
-        builder.setGridHeight(GRID_RADIUS);
-        builder.setGridWidth(GRID_RADIUS);
-        builder.setGridLayout(GRID_LAYOUT);
-        builder.setOrientation(ORIENTATION);
-        builder.setRadius(RADIUS);
-
-        grid = builder.build();
-
-        //noinspection unchecked
-        calc = builder.buildCalculatorFor(grid);
+        worldHandler = new WorldHandler();
 
         /* Other */
         camera = new OrthographicCamera();
@@ -87,24 +71,32 @@ public class BnW extends ApplicationAdapter {
 
     @Override
     public void render() {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        final Color color = game.getCurrentPlayer().color.shade(0.75f);
+        Gdx.gl.glClearColor(color.r, color.g, color.b, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //noinspection unchecked
-        final Observable<Hexagon<HexagonData>> hexagons = grid.getHexagons();
+        final Observable<Hexagon<HexagonData>> hexagons = worldHandler.getWorld().getGrid().getHexagons();
         hexagons.forEach(hexagon -> {
-            final HexagonData data = hexagon.getSatelliteData().orElse(DEFAULT_DATA);
+            final HexagonData data = HexagonData.getData(hexagon);
             data.type.render(this.renderer, data.color, hexagon);
         });
         this.renderer.flush();
 
+        String hexInfo = "";
+        final Hexagon<HexagonData> hex = HexagonData.getHexagon(Gdx.input.getX(), Gdx.input.getY());
+        if (hex != null) {
+            final HexagonData data = HexagonData.getData(hex);
+            hexInfo = "Player: " + data.color + " Level: " + data.type.level;
+        }
+
         polyBatch.begin();
         this.font.draw(polyBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0,
                        Gdx.graphics.getHeight() - this.font.getLineHeight());
-        this.font.draw(polyBatch, "Type: " + type.name() + " Color: " + color.name(), 0,
+        this.font.draw(polyBatch, "Player: " + game.getCurrentPlayer().color + " Moves left: " +
+                                  game.getPlayerHandler().getMovesLeft(), 0,
                        Gdx.graphics.getHeight() - this.font.getLineHeight() * 2);
-        this.font.draw(polyBatch, "Res: " + Gdx.graphics.getWidth() + "x" + Gdx.graphics.getHeight(), 0,
-                       Gdx.graphics.getHeight() - this.font.getLineHeight() * 3);
+        this.font.draw(polyBatch, "Hex info: " + hexInfo, 0, Gdx.graphics.getHeight() - this.font.getLineHeight() * 3);
         polyBatch.end();
     }
 
