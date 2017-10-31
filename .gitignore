@@ -20,3 +20,5 @@ BlackAndWhite\.iml
 *.MF
 
 html/build/gwt/cache/gwt-unitCache/
+
+desktop/build/libs/

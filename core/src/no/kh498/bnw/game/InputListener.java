@@ -33,8 +33,6 @@ public class InputListener implements InputProcessor {
                 this.windowedWidth = Gdx.graphics.getWidth();
                 this.fullscreenHeight = Gdx.graphics.getDisplayMode().height;
                 this.fullscreenWidth = Gdx.graphics.getDisplayMode().width;
-                System.out.println(this.windowedWidth + "x" + this.windowedHeight + "\n" + this.fullscreenWidth + "x" +
-                                   this.fullscreenHeight);
             }
 
 
