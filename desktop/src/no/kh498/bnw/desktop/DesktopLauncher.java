@@ -6,11 +6,15 @@ import no.kh498.bnw.BnW;
 
 public class DesktopLauncher {
 
+
     public static void main(final String[] arg) {
         final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.resizable = false;
         config.vSyncEnabled = false;
         config.foregroundFPS = 9999;
+        config.backgroundFPS = 1;
+        config.width = 1366;
+        config.height = 768;
         new LwjglApplication(new BnW(), config);
     }
 }

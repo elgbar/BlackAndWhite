@@ -6,9 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import no.kh498.bnw.game.HexagonData;
-import no.kh498.bnw.game.InputListener;
-import no.kh498.bnw.game.Renderer;
+import no.kh498.bnw.game.*;
 import org.codetome.hexameter.core.api.*;
 import rx.Observable;
 
@@ -32,20 +30,29 @@ public class BnW extends ApplicationAdapter {
         return calc;
     }
 
-    private static final int GRID_RADIUS = 9;
+    private static final int GRID_RADIUS = 1;
     private static final HexagonalGridLayout GRID_LAYOUT = HEXAGONAL;
     private static final HexagonOrientation ORIENTATION = FLAT_TOP;
-    private static final double RADIUS = 30;
+    private static final double RADIUS = 400;
 
     private static HexagonalGrid<HexagonData> grid;
     private static HexagonalGridCalculator<HexagonData> calc;
 
-    private PolygonSpriteBatch polyBatch;
-    private OrthographicCamera camera;
+    private static PolygonSpriteBatch polyBatch;
+    private static OrthographicCamera camera;
 
     private Renderer renderer;
 
+    //TODO remove, only used for testing
+    public static HexType type = HexType.CUBE;
+    public static HexColor color = HexColor.WHITE;
+
     public static final HexagonData DEFAULT_DATA = new HexagonData();
+
+    public static void updateResolution(final int width, final int height) {
+        camera.setToOrtho(true, width, height);
+        polyBatch.setProjectionMatrix(camera.combined);
+    }
 
     @Override
     public void create() {
@@ -58,22 +65,20 @@ public class BnW extends ApplicationAdapter {
         builder.setGridLayout(GRID_LAYOUT);
         builder.setOrientation(ORIENTATION);
         builder.setRadius(RADIUS);
-        builder.getHexagonDataStorage();
 
         grid = builder.build();
 
+        //noinspection unchecked
         calc = builder.buildCalculatorFor(grid);
 
         /* Other */
-        this.camera = new OrthographicCamera();
-        this.camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera = new OrthographicCamera();
+        polyBatch = new PolygonSpriteBatch();
+        updateResolution(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        this.renderer = new Renderer(this.camera);
+        this.renderer = new Renderer(camera);
 
-        this.polyBatch = new PolygonSpriteBatch(); // To assign at the beginning
-        this.polyBatch.setProjectionMatrix(this.camera.combined);
-
-        this.font = new BitmapFont();
+        this.font = new BitmapFont(true);
 
         Gdx.input.setInputProcessor(new InputListener());
     }
@@ -91,9 +96,12 @@ public class BnW extends ApplicationAdapter {
         });
         this.renderer.flush();
 
-        this.polyBatch.begin();
-        this.font.draw(this.polyBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, this.font.getLineHeight());
-        this.polyBatch.end();
+        polyBatch.begin();
+        this.font.draw(polyBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0,
+                       Gdx.graphics.getHeight() - this.font.getLineHeight());
+        this.font.draw(polyBatch, "Res: " + Gdx.graphics.getWidth() + "x" + Gdx.graphics.getHeight(), 0,
+                       Gdx.graphics.getHeight() - this.font.getLineHeight() * 3);
+        polyBatch.end();
     }
 
     @Override

@@ -1,5 +1,7 @@
 package no.kh498.bnw.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import no.kh498.bnw.BnW;
 import org.codetome.hexameter.core.api.Hexagon;
@@ -9,10 +11,43 @@ import org.codetome.hexameter.core.api.Hexagon;
  * <p>
  * {@inheritDoc}
  */
+@SuppressWarnings("NonJREEmulationClassesInClientCode")
 public class InputListener implements InputProcessor {
+
+    private int windowedHeight = -1;
+    private int windowedWidth = -1;
+
+    private int fullscreenHeight = -1;
+    private int fullscreenWidth = -1;
 
     @Override
     public boolean keyDown(final int keycode) {
+        if (Input.Keys.ESCAPE == keycode) {
+            Gdx.app.exit();
+            return true;
+        }
+        else if (Input.Keys.F == keycode && Gdx.graphics.supportsDisplayModeChange()) {
+
+            if (this.windowedHeight == -1 && this.windowedWidth == -1) {
+                this.windowedHeight = Gdx.graphics.getHeight();
+                this.windowedWidth = Gdx.graphics.getWidth();
+                this.fullscreenHeight = Gdx.graphics.getDisplayMode().height;
+                this.fullscreenWidth = Gdx.graphics.getDisplayMode().width;
+                System.out.println(this.windowedWidth + "x" + this.windowedHeight + "\n" + this.fullscreenWidth + "x" +
+                                   this.fullscreenHeight);
+            }
+
+
+            if (!Gdx.graphics.isFullscreen()) {
+                BnW.updateResolution(this.fullscreenWidth, this.fullscreenHeight);
+                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+            }
+            else {
+                BnW.updateResolution(this.windowedWidth, this.windowedHeight);
+                Gdx.graphics.setWindowedMode(this.windowedWidth, this.windowedHeight);
+            }
+        }
+
         return false;
     }
 
