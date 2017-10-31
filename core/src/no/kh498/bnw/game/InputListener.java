@@ -58,25 +58,32 @@ public class InputListener implements InputProcessor {
 
     @Override
     public boolean keyTyped(final char character) {
-        return false;
+        int ordinal;
+        switch (character) {
+            case 'c':
+                ordinal = BnW.color.ordinal() + 1;
+                if (ordinal >= HexColor.values().length) {
+                    ordinal = 0;
+                }
+
+                BnW.color = HexColor.values()[ordinal];
+                return true;
+            case 't':
+                ordinal = BnW.type.ordinal() + 1;
+                if (ordinal >= HexType.values().length) {
+                    ordinal = 0;
+                }
+                BnW.type = HexType.values()[ordinal];
+                return true;
+            default:
+                return false;
+        }
+
     }
 
     @Override
     public boolean touchDown(final int screenX, final int screenY, final int pointer, final int button) {
-        final Hexagon<HexagonData> hex =
-            (Hexagon<HexagonData>) BnW.getGrid().getByPixelCoordinate(screenX, screenY).orElse(null);
-        if (hex != null) {
-            System.out.println(
-                "Processed: " + screenX + ", " + screenY + " | hex to coord: " + hex.getCenterX() + ", " +
-                hex.getCenterY());
-            
-            final HexagonData data = hex.getSatelliteData().orElse(new HexagonData());
-            data.color = HexColor.WHITE;
-            hex.setSatelliteData(data);
-            return true;
-        }
-        System.out.println("not processed: " + screenX + ", " + screenY);
-        return false;
+        return changeHex(screenX, screenY);
     }
 
     @Override
@@ -86,7 +93,7 @@ public class InputListener implements InputProcessor {
 
     @Override
     public boolean touchDragged(final int screenX, final int screenY, final int pointer) {
-        return false;
+        return changeHex(screenX, screenY);
     }
 
     @Override
@@ -96,6 +103,24 @@ public class InputListener implements InputProcessor {
 
     @Override
     public boolean scrolled(final int amount) {
+        return false;
+    }
+
+    private boolean changeHex(final int screenX, final int screenY) {
+        final Hexagon<HexagonData> hex =
+            (Hexagon<HexagonData>) BnW.getGrid().getByPixelCoordinate(screenX, screenY).orElse(null);
+        if (hex != null) {
+//            System.out.println(
+//                "Processed: " + screenX + ", " + screenY + " | hex to coord: " + hex.getCenterX() + ", " +
+//                hex.getCenterY());
+
+            final HexagonData data = hex.getSatelliteData().orElse(new HexagonData());
+            data.color = BnW.color;
+            data.type = BnW.type;
+            hex.setSatelliteData(data);
+            return true;
+        }
+//        System.out.println("not processed: " + screenX + ", " + screenY);
         return false;
     }
 }

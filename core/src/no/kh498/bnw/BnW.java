@@ -99,6 +99,8 @@ public class BnW extends ApplicationAdapter {
         polyBatch.begin();
         this.font.draw(polyBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0,
                        Gdx.graphics.getHeight() - this.font.getLineHeight());
+        this.font.draw(polyBatch, "Type: " + type.name() + " Color: " + color.name(), 0,
+                       Gdx.graphics.getHeight() - this.font.getLineHeight() * 2);
         this.font.draw(polyBatch, "Res: " + Gdx.graphics.getWidth() + "x" + Gdx.graphics.getHeight(), 0,
                        Gdx.graphics.getHeight() - this.font.getLineHeight() * 3);
         polyBatch.end();
