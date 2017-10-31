@@ -5,7 +5,6 @@ import org.codetome.hexameter.core.api.Hexagon;
 import org.codetome.hexameter.core.api.Point;
 
 import java.util.List;
-import java.util.WeakHashMap;
 
 /**
  * @author karl henrik
@@ -47,34 +46,15 @@ public enum HexType {
         this.surfaces = surfaces;
     }
 
-    WeakHashMap<Hexagon<HexagonData>, List<Point>> cache = new WeakHashMap<>();
-
     public void render(final Renderer renderer, final HexColor color, final Hexagon<HexagonData> hexagon) {
         final List<Point> points;
-        if (!this.cache.containsKey(hexagon)) {
-            final Point center = Point.fromPosition(hexagon.getCenterX(), hexagon.getCenterY());
-            points = hexagon.getPoints();
-            points.add(center);
-            this.cache.put(hexagon, points);
-        }
-        else {
-            points = this.cache.get(hexagon);
-        }
+        final Point center = Point.fromPosition(hexagon.getCenterX(), hexagon.getCenterY());
+        points = hexagon.getPoints();
+        points.add(center);
 
         for (final Surface sur : this.surfaces) {
-            sur.getVerities(renderer, color, points);
+            sur.render(renderer, color, points);
         }
-    }
-
-
-    float[] toRenderPoints(final List<Point> points) {
-        final float[] fpoints = new float[points.size() * 2];
-        for (int i = 0; i < points.size(); i++) {
-            final Point point = points.get(i);
-            fpoints[i * 2] = (float) point.getCoordinateX();
-            fpoints[i * 2 + 1] = (float) point.getCoordinateY();
-        }
-        return fpoints;
     }
 
     private static final class Surface {
@@ -109,15 +89,28 @@ public enum HexType {
             arr.addAll((float) p.getCoordinateX(), (float) p.getCoordinateY());
         }
 
-        void getVerities(final Renderer renderer, final HexColor color, final List<Point> points) {
+        void printPoint(final List<Point> points) {
+            for (final Point p : points) {
+                System.out.print(p.getCoordinateX() + ", " + p.getCoordinateY() + " | ");
+            }
+            System.out.println();
+        }
 
-            final FloatArray floatArray = new FloatArray();
+        private static final float[] vertices = new float[6];
 
-            appendFloatArray(points.get(this.v1), floatArray);
-            appendFloatArray(points.get(this.v2), floatArray);
-            appendFloatArray(points.get(this.v3), floatArray);
+        void render(final Renderer renderer, final HexColor color, final List<Point> points) {
 
-            final float[] vertices = floatArray.toArray();
+            final Point p1 = points.get(this.v1);
+            vertices[0] = (float) p1.getCoordinateX();
+            vertices[1] = (float) p1.getCoordinateY();
+
+            final Point p2 = points.get(this.v2);
+            vertices[2] = (float) p2.getCoordinateX();
+            vertices[3] = (float) p2.getCoordinateY();
+
+            final Point p3 = points.get(this.v3);
+            vertices[4] = (float) p3.getCoordinateX();
+            vertices[5] = (float) p3.getCoordinateY();
 
             renderer.drawTriangle(color.shade(this.shade).toFloatBits(), vertices);
         }
