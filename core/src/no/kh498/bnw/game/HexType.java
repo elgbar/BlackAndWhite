@@ -20,42 +20,50 @@ import java.util.List;
 public enum HexType {
 
     //@formatter:off
-    FLAT(new Surface(0, 1, 5, 1.00f),    //   2-----1
+    FLAT(new Surface(0, 1, 5, 1.00f),    //   4-----5
          new Surface(1, 4, 5, 1.00f),    //  /|   / |\
          new Surface(1, 2, 4, 1.00f),    // 3 |  /  | 0
          new Surface(2, 3, 4, 1.00f)),   //  \| /   |/
-                                                          //   4-----5
+                                                          //   2-----1
 
-    DIAMOND(new Surface(6, 5, 0, 0.63f), //   2-----1
-            new Surface(6, 5, 4, 0.73f), //  /  \ /  \
-            new Surface(6, 0, 1, 0.73f), // 3----6----0
-            new Surface(6, 1, 2, 0.93f), //  \  / \  /
-            new Surface(6, 4, 3, 0.93f), //   4-----5
-            new Surface(6, 3, 2, 1f)),
+    DIAMOND(new Surface(6, 1, 0, 0.63f), //   4-----5
+            new Surface(6, 1, 2, 0.73f), //  /  \ /  \
+            new Surface(6, 0, 5, 0.73f), // 3----6----0
+            new Surface(6, 2, 3, 0.93f), //  \  / \  /
+            new Surface(6, 4, 5, 0.93f), //   2-----1
+            new Surface(6, 3, 4, 0.98f)),
 
-    HALF(new Surface(0, 1, 5, 0.78f),    //   2-----1
-         new Surface(1, 4, 5, 0.78f),    //  /|   / |\
-         new Surface(1, 2, 4, 1.00f),    // 3 |  /  | 0
-         new Surface(2, 3, 4, 1.00f)),   //  \| /   |/
-                                                          //   4-----5
+    HALF(new Surface(0, 1, 5, 0.78f),    //   4-----5
+         new Surface(1, 2, 5, 0.78f),    //  /|   / |\
+         new Surface(2, 4, 5, 0.98f),    // 3 |  /  | 0
+         new Surface(2, 3, 4, 0.98f)),   //  \| /   |/
+                                                          //   2-----1
 
-    CUBE(new Surface(6, 5, 0, 0.68f),    //   2-----1
-         new Surface(6, 0, 1, 0.68f),    //  /  \ /  \
-         new Surface(6, 5, 4, 0.83f),    // 3----6----0
-         new Surface(6, 4, 3, 0.83f),    //  \  / \  /
-         new Surface(6, 1, 2, 1.00f),    //   4-----5
-         new Surface(6, 3, 2, 1.00f)),
+    CUBE(new Surface(6, 1, 0, 0.68f),    //   4-----5
+         new Surface(6, 0, 5, 0.68f),    //  /  \ /  \
+         new Surface(6, 1, 2, 0.83f),    // 3----6----0
+         new Surface(6, 2, 3, 0.83f),    //  \  / \  /
+         new Surface(6, 5, 4, 0.98f),    //   2-----1
+         new Surface(6, 3, 4, 0.98f)),
 
-    JEWEL(new Surface(0, 1, 2, 0.63f),   //   2-----1
-          new Surface(0, 2, 4, 0.73f),   //  /|‾-__  \
-          new Surface(0, 4, 5, 0.83f),   // 3 |    ‾--0
-          new Surface(2, 3, 4, 1.00f)),  //  \| _--‾ /
-                                                          //   4‾----5
-     ASYMMETRICAL(new Surface(0, 4, 5, 0.63f),  //   2-----1
-                  new Surface(0, 3, 4, 0.73f),  //  / ‾-__  \
-                  new Surface(0, 1, 2, 0.83f),  // 3------‾--0
-                  new Surface(0, 2, 3, 1.00f)); //  \  _--‾ /
-                                                                 //   4‾----5
+    JEWEL(new Surface(0, 1, 2, 0.65f),   //   4-----5
+          new Surface(0, 2, 4, 0.75f),   //  /|‾-__  \
+          new Surface(0, 4, 5, 0.85f),   // 3 |    ‾--0
+          new Surface(2, 3, 4, 0.98f)),  //  \| _--‾ /
+                                                          //   2-----1
+
+     ASYMMETRICAL(new Surface(0, 2, 1, 0.69f),  //   4-----5
+                  new Surface(0, 3, 2, 0.79f),  //  / ‾-__  \
+                  new Surface(0, 5, 4, 0.89f),  // 3------‾--0
+                  new Surface(0, 4, 3, 0.98f)), //  \  _--‾ /
+                                                                 //   2-----1
+
+    HOURGLASS(new Surface(6, 2, 3, 0.81f), //   4-----5
+            new Surface(6, 0, 5, 0.81f),   //  /  \ /  \
+            new Surface(6, 1, 2, 0.61f),   // 3----6----0
+            new Surface(6, 1, 0, 0.61f),   //  \  / \  /
+            new Surface(6, 5, 4, 0.98f),   //   2-----1
+            new Surface(6, 3, 4, 0.98f));
    //@formatter:on
 
     private final Surface[] surfaces;
