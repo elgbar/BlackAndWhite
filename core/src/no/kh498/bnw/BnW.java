@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
+import no.kh498.bnw.game.Game;
 import no.kh498.bnw.hexagon.*;
 import org.codetome.hexameter.core.api.*;
 import rx.Observable;
@@ -14,10 +15,13 @@ public class BnW extends ApplicationAdapter {
 
     private static BnW instance;
     private BitmapFont font;
+    private static Game game;
 
     public static BnW getInst() {
         return instance;
     }
+
+    public static Game getGame() { return game;}
 
     public static HexagonalGrid getGrid() {
         return grid;
@@ -28,7 +32,7 @@ public class BnW extends ApplicationAdapter {
     }
 
     private static final int GRID_RADIUS = 5;
-    private static final HexagonalGridLayout GRID_LAYOUT = HexagonalGridLayout.RECTANGULAR;
+    private static final HexagonalGridLayout GRID_LAYOUT = HexagonalGridLayout.HEXAGONAL;
     private static final HexagonOrientation ORIENTATION = HexagonOrientation.FLAT_TOP;
     private static final double RADIUS = 40;
 
@@ -54,6 +58,7 @@ public class BnW extends ApplicationAdapter {
     @Override
     public void create() {
         instance = this;
+        game = new no.kh498.bnw.game.Game();
 
         /* Hexagon */
         final HexagonalGridBuilder<HexagonData> builder = new HexagonalGridBuilder<>();

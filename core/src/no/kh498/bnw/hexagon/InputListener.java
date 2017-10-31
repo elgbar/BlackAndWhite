@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import no.kh498.bnw.BnW;
+import no.kh498.bnw.game.Player;
 import org.codetome.hexameter.core.api.Hexagon;
 
 /**
@@ -85,7 +86,8 @@ public class InputListener implements InputProcessor {
 
     @Override
     public boolean touchDragged(final int screenX, final int screenY, final int pointer) {
-        return changeHex(screenX, screenY);
+//        return changeHex(screenX, screenY);
+        return false;
     }
 
     @Override
@@ -102,10 +104,8 @@ public class InputListener implements InputProcessor {
         final Hexagon<HexagonData> hex =
             (Hexagon<HexagonData>) BnW.getGrid().getByPixelCoordinate(screenX, screenY).orElse(null);
         if (hex != null) {
-            final HexagonData data = hex.getSatelliteData().orElse(new HexagonData());
-            data.color = BnW.color;
-            data.type = BnW.type;
-            hex.setSatelliteData(data);
+            final Player player = BnW.getGame().getPlayerHandler().getPlayer(BnW.color);
+            player.makeMove(hex);
             return true;
         }
         return false;
