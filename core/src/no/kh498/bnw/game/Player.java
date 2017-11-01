@@ -43,8 +43,8 @@ public class Player {
 
         final int suggestedMoves = sum / hexes;
 
-        if (suggestedMoves < PlayerHandler.DEFAULT_MOVES) {
-            return PlayerHandler.DEFAULT_MOVES;
+        if (suggestedMoves < PlayerHandler.MIN_MOVES) {
+            return PlayerHandler.MIN_MOVES;
         }
         return suggestedMoves;
     }

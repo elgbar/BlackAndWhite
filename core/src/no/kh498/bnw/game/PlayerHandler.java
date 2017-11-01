@@ -16,7 +16,7 @@ public class PlayerHandler {
     private final ArrayList<Player> players = new ArrayList<>();
     private int currPlayerIndex;
 
-    static final int DEFAULT_MOVES = 3;
+    static final int MIN_MOVES = 3;
     private int movesLeft = -1;
 
     void addPlayer(final HexColor color) {
@@ -30,11 +30,11 @@ public class PlayerHandler {
     }
 
 
-    public Player getCurrentPlayer() {
+    Player getCurrentPlayer() {
         return this.players.get(this.currPlayerIndex);
     }
 
-    public void endTurn() {
+    void endTurn() {
         this.currPlayerIndex++;
         if (this.currPlayerIndex == this.players.size()) {
             this.currPlayerIndex = 0;
@@ -42,8 +42,7 @@ public class PlayerHandler {
         this.movesLeft = getCurrentPlayer().calculateMoves();
     }
 
-    public boolean canReach(final Hexagon<HexagonData> hexagon) {
-
+    private boolean canReach(final Hexagon<HexagonData> hexagon) {
         final HexColor currColor = getCurrentPlayer().color;
 
         if (HexUtil.getData(hexagon).color == currColor) {
@@ -59,7 +58,6 @@ public class PlayerHandler {
     }
 
     public void makeMove(final Hexagon<HexagonData> hexagon) {
-
         if (!canReach(hexagon)) {
             return;
         }
