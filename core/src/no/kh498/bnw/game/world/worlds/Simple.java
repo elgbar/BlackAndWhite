@@ -1,8 +1,8 @@
 package no.kh498.bnw.game.world.worlds;
 
-import no.kh498.bnw.game.world.World;
 import no.kh498.bnw.game.HexColor;
 import no.kh498.bnw.game.HexType;
+import no.kh498.bnw.game.world.World;
 import no.kh498.bnw.hexagon.HexagonData;
 import org.codetome.hexameter.core.api.Hexagon;
 import rx.Observable;
@@ -20,7 +20,7 @@ public class Simple extends World {
         hexagons.forEach(hexagon -> {
             final HexagonData data = HexagonData.getData(hexagon);
             data.type = HexType.JEWEL;
-            if (hexagon.getCubeCoordinate().getGridX() % 2 == 0 && hexagon.getCubeCoordinate().getGridY() % 2 == 0) {
+            if (hexagon.getCubeCoordinate().getGridX() == 1) {
                 data.color = HexColor.BLACK;
             }
             else if (hexagon.getCubeCoordinate().getGridX() == 3) {
