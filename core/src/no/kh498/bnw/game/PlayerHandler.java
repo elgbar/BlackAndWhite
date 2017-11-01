@@ -17,7 +17,7 @@ public class PlayerHandler {
     private int currPlayerIndex;
 
     static final int DEFAULT_MOVES = 3;
-    private int movesLeft = DEFAULT_MOVES;
+    private int movesLeft = -1;
 
     void addPlayer(final HexColor color) {
         for (final Player player : this.players) {
@@ -39,7 +39,6 @@ public class PlayerHandler {
         if (this.currPlayerIndex == this.players.size()) {
             this.currPlayerIndex = 0;
         }
-
         this.movesLeft = getCurrentPlayer().calculateMoves();
     }
 
@@ -80,6 +79,9 @@ public class PlayerHandler {
     }
 
     public int getMovesLeft() {
+        if (this.movesLeft == -1) {
+            this.movesLeft = getCurrentPlayer().calculateMoves();
+        }
         return this.movesLeft;
     }
 }
