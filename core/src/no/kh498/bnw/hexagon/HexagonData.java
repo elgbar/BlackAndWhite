@@ -33,10 +33,7 @@ public class HexagonData extends DefaultSatelliteData {
 
         final HexagonData data = (HexagonData) o;
 
-        if (this.color != data.color) {
-            return false;
-        }
-        return this.type == data.type;
+        return this.color == data.color && this.type == data.type;
     }
 
     @Override
