@@ -15,6 +15,7 @@ import no.kh498.bnw.hexagon.renderer.OutlineRenderer;
 import no.kh498.bnw.hexagon.renderer.VerticesRenderer;
 import org.codetome.hexameter.core.api.CubeCoordinate;
 import org.codetome.hexameter.core.api.Hexagon;
+import org.codetome.hexameter.core.internal.GridData;
 
 public class BnW extends ApplicationAdapter {
 
@@ -93,8 +94,11 @@ public class BnW extends ApplicationAdapter {
         this.font.draw(polyBatch, "Hex info: " + hexInfo, 0, Gdx.graphics.getHeight() - this.font.getLineHeight() * 3);
 
         if (printDebug) {
-            this.font
-                .draw(polyBatch, "Hex info: " + hexInfo, 0, Gdx.graphics.getHeight() - this.font.getLineHeight() * 3);
+            final GridData gridData = game.getGrid().getGridData();
+            final String gridInfo =
+                "Grid data: dimensions: " + gridData.getGridWidth() + ", " + gridData.getGridHeight();
+
+            this.font.draw(polyBatch, gridInfo, 0, Gdx.graphics.getHeight() - this.font.getLineHeight() * 4);
 
         }
         polyBatch.end();
