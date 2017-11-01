@@ -1,4 +1,4 @@
-package no.kh498.bnw.hexagon;
+package no.kh498.bnw.game;
 
 import com.badlogic.gdx.graphics.Color;
 

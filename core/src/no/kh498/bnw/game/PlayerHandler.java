@@ -1,7 +1,6 @@
 package no.kh498.bnw.game;
 
 import no.kh498.bnw.BnW;
-import no.kh498.bnw.hexagon.HexColor;
 import no.kh498.bnw.hexagon.HexagonData;
 import org.codetome.hexameter.core.api.Hexagon;
 
@@ -46,7 +45,7 @@ public class PlayerHandler {
     public boolean canReach(final Hexagon<HexagonData> hexagon) {
 
         final HexColor currColor = getCurrentPlayer().color;
-        
+
         if (HexagonData.getData(hexagon).color == currColor) {
             return true;
         }

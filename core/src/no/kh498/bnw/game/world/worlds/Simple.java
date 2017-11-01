@@ -1,8 +1,8 @@
 package no.kh498.bnw.game.world.worlds;
 
 import no.kh498.bnw.game.world.World;
-import no.kh498.bnw.hexagon.HexColor;
-import no.kh498.bnw.hexagon.HexType;
+import no.kh498.bnw.game.HexColor;
+import no.kh498.bnw.game.HexType;
 import no.kh498.bnw.hexagon.HexagonData;
 import org.codetome.hexameter.core.api.Hexagon;
 import rx.Observable;

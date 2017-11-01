@@ -1,6 +1,5 @@
 package no.kh498.bnw.game;
 
-import no.kh498.bnw.hexagon.HexColor;
 import no.kh498.bnw.hexagon.HexagonData;
 
 /**

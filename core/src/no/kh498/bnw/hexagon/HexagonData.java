@@ -1,6 +1,8 @@
 package no.kh498.bnw.hexagon;
 
 import no.kh498.bnw.BnW;
+import no.kh498.bnw.game.HexColor;
+import no.kh498.bnw.game.HexType;
 import org.codetome.hexameter.core.api.Hexagon;
 import org.codetome.hexameter.core.api.defaults.DefaultSatelliteData;
 

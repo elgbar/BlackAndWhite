@@ -1,7 +1,5 @@
 package no.kh498.bnw.game;
 
-import no.kh498.bnw.hexagon.HexColor;
-
 /**
  * @author karl henrik
  */
