@@ -8,42 +8,31 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import no.kh498.bnw.game.Game;
-import no.kh498.bnw.game.world.World;
-import no.kh498.bnw.game.world.WorldHandler;
+import no.kh498.bnw.hexagon.HexUtil;
 import no.kh498.bnw.hexagon.HexagonData;
 import no.kh498.bnw.hexagon.InputListener;
-import no.kh498.bnw.hexagon.Renderer;
+import no.kh498.bnw.hexagon.renderer.OutlineRenderer;
+import no.kh498.bnw.hexagon.renderer.VerticesRenderer;
+import org.codetome.hexameter.core.api.CubeCoordinate;
 import org.codetome.hexameter.core.api.Hexagon;
-import rx.Observable;
 
 public class BnW extends ApplicationAdapter {
 
-    private static BnW instance;
+
+    public static boolean printDebug;
+    public static boolean printHelp;
+
     private BitmapFont font;
     private static Game game;
 
-    public static BnW getInst() {
-        return instance;
-    }
-
-    public static World getWorld() {
-        return worldHandler.getWorld();
-    }
-
-    public static WorldHandler getWorldHandler() {
-        return worldHandler;
-    }
-
     public static Game getGame() { return game;}
 
-    private static WorldHandler worldHandler;
 
     private static PolygonSpriteBatch polyBatch;
     private static OrthographicCamera camera;
 
-    private Renderer renderer;
-
-    public static final HexagonData DEFAULT_DATA = new HexagonData();
+    private VerticesRenderer verticesRenderer;
+    private OutlineRenderer outlineRenderer;
 
     public static void updateResolution(final int width, final int height) {
         camera.setToOrtho(true, width, height);
@@ -52,17 +41,15 @@ public class BnW extends ApplicationAdapter {
 
     @Override
     public void create() {
-        instance = this;
-        game = new no.kh498.bnw.game.Game();
-
-        worldHandler = new WorldHandler();
+        game = new Game();
 
         /* Other */
         camera = new OrthographicCamera();
         polyBatch = new PolygonSpriteBatch();
         updateResolution(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        this.renderer = new Renderer(camera);
+        this.verticesRenderer = new VerticesRenderer(camera);
+        this.outlineRenderer = new OutlineRenderer(camera);
 
         this.font = new BitmapFont(true);
 
@@ -76,18 +63,25 @@ public class BnW extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //noinspection unchecked
-        final Observable<Hexagon<HexagonData>> hexagons = worldHandler.getWorld().getGrid().getHexagons();
-        hexagons.forEach(hexagon -> {
-            final HexagonData data = HexagonData.getData(hexagon);
-            data.type.render(this.renderer, data.color, hexagon);
-        });
-        this.renderer.flush();
+        for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons()) {
+            final HexagonData data = HexUtil.getData(hexagon);
+            data.type.render(this.verticesRenderer, data.color, hexagon);
+        }
+        this.verticesRenderer.flush();
+
+        for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons()) {
+            this.outlineRenderer.drawOutline(hexagon);
+        }
 
         String hexInfo = "";
-        final Hexagon<HexagonData> hex = HexagonData.getHexagon(Gdx.input.getX(), Gdx.input.getY());
+        final Hexagon<HexagonData> hex = HexUtil.getHexagon(Gdx.input.getX(), Gdx.input.getY());
         if (hex != null) {
-            final HexagonData data = HexagonData.getData(hex);
+            final HexagonData data = HexUtil.getData(hex);
             hexInfo = data.color + " level " + data.type.level;
+            if (printDebug) {
+                final CubeCoordinate coord = hex.getCubeCoordinate();
+                hexInfo += " Cube coord: " + coord.getGridX() + ", " + coord.getGridY() + ", " + coord.getGridZ();
+            }
         }
 
         polyBatch.begin();
@@ -97,6 +91,12 @@ public class BnW extends ApplicationAdapter {
                                   game.getPlayerHandler().getMovesLeft(), 0,
                        Gdx.graphics.getHeight() - this.font.getLineHeight() * 2);
         this.font.draw(polyBatch, "Hex info: " + hexInfo, 0, Gdx.graphics.getHeight() - this.font.getLineHeight() * 3);
+
+        if (printDebug) {
+            this.font
+                .draw(polyBatch, "Hex info: " + hexInfo, 0, Gdx.graphics.getHeight() - this.font.getLineHeight() * 3);
+
+        }
         polyBatch.end();
     }
 

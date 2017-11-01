@@ -24,7 +24,6 @@ public class InputListener implements InputProcessor {
             return true;
         }
         else if (Input.Keys.F == keycode && Gdx.graphics.supportsDisplayModeChange()) {
-
             if (this.windowedHeight == -1 && this.windowedWidth == -1) {
                 this.windowedHeight = Gdx.graphics.getHeight();
                 this.windowedWidth = Gdx.graphics.getWidth();
@@ -39,9 +38,18 @@ public class InputListener implements InputProcessor {
                 Gdx.graphics.setWindowedMode(this.windowedWidth, this.windowedHeight);
             }
         }
-
+        else if (Input.Keys.N == keycode) {
+            BnW.getGame().getWorldHandler().nextWorld();
+        }
+        else if (Input.Keys.F3 == keycode) {
+            BnW.printDebug = !BnW.printDebug;
+        }
+        else if (Input.Keys.F1 == keycode) {
+            BnW.printHelp = !BnW.printHelp;
+        }
         return false;
     }
+
 
     @Override
     public boolean keyUp(final int keycode) {
@@ -89,7 +97,7 @@ public class InputListener implements InputProcessor {
 
     private boolean changeHex(final int screenX, final int screenY) {
         //noinspection unchecked
-        final Hexagon<HexagonData> hex = HexagonData.getHexagon(screenX, screenY);
+        final Hexagon<HexagonData> hex = HexUtil.getHexagon(screenX, screenY);
         if (hex != null) {
             BnW.getGame().getPlayerHandler().makeMove(hex);
             return true;

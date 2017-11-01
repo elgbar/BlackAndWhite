@@ -1,9 +1,7 @@
 package no.kh498.bnw.hexagon;
 
-import no.kh498.bnw.BnW;
 import no.kh498.bnw.game.HexColor;
 import no.kh498.bnw.game.HexType;
-import org.codetome.hexameter.core.api.Hexagon;
 import org.codetome.hexameter.core.api.defaults.DefaultSatelliteData;
 
 /**
@@ -12,15 +10,8 @@ import org.codetome.hexameter.core.api.defaults.DefaultSatelliteData;
 public class HexagonData extends DefaultSatelliteData {
 
     public HexColor color = HexColor.GRAY;
-    public HexType type = HexType.CUBE;
+    public HexType type = HexType.FLAT;
 
-    public static HexagonData getData(final Hexagon<HexagonData> hexagon) {
-        return hexagon.getSatelliteData().orElse(new HexagonData());
-    }
-
-    public static Hexagon<HexagonData> getHexagon(final int x, final int y) {
-        return BnW.getWorld().getGrid().getByPixelCoordinate(x, y).orElse(null);
-    }
 
     @Override
     public boolean equals(final Object o) {

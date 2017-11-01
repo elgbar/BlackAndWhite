@@ -1,4 +1,4 @@
-package no.kh498.bnw.hexagon;
+package no.kh498.bnw.hexagon.renderer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-public class Renderer implements Disposable {
+public class VerticesRenderer implements Disposable {
 
 //    public static void main(String[] args) {
 //        LwjglApplication app = new LwjglApplication(new MeshTutorial1(), "Mesh Tutorial 1", 800, 600, true);
@@ -63,7 +63,7 @@ public class Renderer implements Disposable {
     //The index position
     private int idx = 0;
 
-    public Renderer(final OrthographicCamera cam) {
+    public VerticesRenderer(final OrthographicCamera cam) {
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);

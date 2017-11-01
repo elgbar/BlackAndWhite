@@ -3,9 +3,9 @@ package no.kh498.bnw.game.world.worlds;
 import no.kh498.bnw.game.HexColor;
 import no.kh498.bnw.game.HexType;
 import no.kh498.bnw.game.world.World;
+import no.kh498.bnw.hexagon.HexUtil;
 import no.kh498.bnw.hexagon.HexagonData;
 import org.codetome.hexameter.core.api.Hexagon;
-import rx.Observable;
 
 /**
  * @author karl henrik
@@ -16,9 +16,8 @@ public class Simple extends World {
     public void load() {
         super.load();
 
-        final Observable<Hexagon<HexagonData>> hexagons = getGrid().getHexagons();
-        hexagons.forEach(hexagon -> {
-            final HexagonData data = HexagonData.getData(hexagon);
+        for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons(this.grid)) {
+            final HexagonData data = HexUtil.getData(hexagon);
             data.type = HexType.JEWEL;
             if (hexagon.getCubeCoordinate().getGridX() == 1) {
                 data.color = HexColor.BLACK;
@@ -30,6 +29,6 @@ public class Simple extends World {
                 data.type = HexType.HALF;
             }
             hexagon.setSatelliteData(data);
-        });
+        }
     }
 }

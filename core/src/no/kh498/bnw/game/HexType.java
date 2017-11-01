@@ -2,7 +2,7 @@ package no.kh498.bnw.game;
 
 import com.badlogic.gdx.utils.FloatArray;
 import no.kh498.bnw.hexagon.HexagonData;
-import no.kh498.bnw.hexagon.Renderer;
+import no.kh498.bnw.hexagon.renderer.VerticesRenderer;
 import org.codetome.hexameter.core.api.Hexagon;
 import org.codetome.hexameter.core.api.Point;
 
@@ -54,7 +54,7 @@ public enum HexType {
          new Surface(6, 5, 4, 0.98f),     //   2-----1
          new Surface(6, 3, 4, 0.98f)),
 
-    HOURGLASS(5,new Surface(6, 2, 3, 0.81f), //   4-----5
+    HOURGLASS(5,new Surface(6, 2, 3, 0.81f),   //   4-----5
               new Surface(6, 0, 5, 0.81f),     //  /  \ /  \
               new Surface(6, 1, 2, 0.61f),     // 3----6----0
               new Surface(6, 1, 0, 0.61f),     //  \  / \  /
@@ -77,7 +77,7 @@ public enum HexType {
     static {
         for (final HexType type : HexType.values()) {
             if (levels[type.level] != null) {
-                throw new RuntimeException("Two HexTypes has the same level!");
+                throw new RuntimeException("Two HexTypes have the same level!");
             }
             levels[type.level] = type;
         }
@@ -108,14 +108,15 @@ public enum HexType {
         return levels[this.level + 1];
     }
 
-    public void render(final Renderer renderer, final HexColor color, final Hexagon<HexagonData> hexagon) {
+    public void render(final VerticesRenderer verticesRenderer, final HexColor color,
+                       final Hexagon<HexagonData> hexagon) {
         final List<Point> points;
         final Point center = Point.fromPosition(hexagon.getCenterX(), hexagon.getCenterY());
         points = hexagon.getPoints();
         points.add(center);
 
         for (final Surface sur : this.surfaces) {
-            sur.render(renderer, color, points);
+            sur.render(verticesRenderer, color, points);
         }
     }
 
@@ -160,7 +161,7 @@ public enum HexType {
 
         private static final float[] vertices = new float[6];
 
-        void render(final Renderer renderer, final HexColor color, final List<Point> points) {
+        void render(final VerticesRenderer verticesRenderer, final HexColor color, final List<Point> points) {
 
             final Point p1 = points.get(this.v1);
             vertices[0] = (float) p1.getCoordinateX();
@@ -174,7 +175,7 @@ public enum HexType {
             vertices[4] = (float) p3.getCoordinateX();
             vertices[5] = (float) p3.getCoordinateY();
 
-            renderer.drawTriangle(color.shade(this.shade).toFloatBits(), vertices);
+            verticesRenderer.drawTriangle(color.shade(this.shade).toFloatBits(), vertices);
         }
     }
 }

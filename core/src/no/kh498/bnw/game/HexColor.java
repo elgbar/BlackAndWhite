@@ -42,4 +42,8 @@ public enum HexColor {
             return this.ColorCache.get(percent);
         }
     }
+
+    public Color inverse() {
+        return new Color(1 - this.shade.r, 1 - this.shade.g, 1 - this.shade.b, 1f);
+    }
 }

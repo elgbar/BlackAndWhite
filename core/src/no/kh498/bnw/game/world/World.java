@@ -43,10 +43,28 @@ public abstract class World {
         this.calc = builder.buildCalculatorFor(this.grid);
     }
 
+
     public void unload() {
         this.grid = null;
         this.calc = null;
     }
 
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof World)) {
+            return false;
+        }
 
+        final World world = (World) o;
+
+        return this.grid.equals(world.grid);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.grid.hashCode();
+    }
 }

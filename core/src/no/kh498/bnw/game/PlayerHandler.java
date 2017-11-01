@@ -1,11 +1,11 @@
 package no.kh498.bnw.game;
 
 import no.kh498.bnw.BnW;
+import no.kh498.bnw.hexagon.HexUtil;
 import no.kh498.bnw.hexagon.HexagonData;
 import org.codetome.hexameter.core.api.Hexagon;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * @author karl henrik
@@ -16,7 +16,7 @@ public class PlayerHandler {
     private final ArrayList<Player> players = new ArrayList<>();
     private int currPlayerIndex;
 
-    private static final int DEFAULT_MOVES = 3;
+    static final int DEFAULT_MOVES = 3;
     private int movesLeft = DEFAULT_MOVES;
 
     void addPlayer(final HexColor color) {
@@ -35,24 +35,24 @@ public class PlayerHandler {
     }
 
     public void endTurn() {
-        this.movesLeft = DEFAULT_MOVES;
         this.currPlayerIndex++;
         if (this.currPlayerIndex == this.players.size()) {
             this.currPlayerIndex = 0;
         }
+
+        this.movesLeft = getCurrentPlayer().calculateMoves();
     }
 
     public boolean canReach(final Hexagon<HexagonData> hexagon) {
 
         final HexColor currColor = getCurrentPlayer().color;
 
-        if (HexagonData.getData(hexagon).color == currColor) {
+        if (HexUtil.getData(hexagon).color == currColor) {
             return true;
         }
 
-        final Collection<Hexagon<HexagonData>> neighbors = BnW.getWorld().getGrid().getNeighborsOf(hexagon);
-        for (final Hexagon<HexagonData> hex : neighbors) {
-            if (HexagonData.getData(hex).color == currColor) {
+        for (final Hexagon<HexagonData> hex : BnW.getGame().getGrid().getNeighborsOf(hexagon)) {
+            if (HexUtil.getData(hex).color == currColor) {
                 return true;
             }
         }
@@ -65,7 +65,7 @@ public class PlayerHandler {
             return;
         }
 
-        final HexagonData data = HexagonData.getData(hexagon);
+        final HexagonData data = HexUtil.getData(hexagon);
         final int check = data.hashCode();
 
         getCurrentPlayer().makeMove(data);
