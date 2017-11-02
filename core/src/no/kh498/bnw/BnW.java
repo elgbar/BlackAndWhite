@@ -93,7 +93,8 @@ public class BnW extends ApplicationAdapter {
             final HexagonData data = HexUtil.getData(hexagon);
 
             if (highlighted.size() > 0 &&
-                (!highlighted.contains(hexagon) || !game.getPlayerHandler().canReach(hexagon))) {
+                (!highlighted.contains(hexagon) || !game.getPlayerHandler().canReach(hexagon) ||
+                 !data.type.canChange())) {
                 data.brightness = HexagonData.DIM;
             }
             else {

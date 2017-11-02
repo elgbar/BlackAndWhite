@@ -92,6 +92,10 @@ public enum HexType {
         return this.level == 1;
     }
 
+    public boolean canChange() {
+        return this.level > 0 && this.level + 1 < levels.length;
+    }
+
     public HexType getPrevLevel() {
         //ensure no exception
         if (this.level <= 1) {
