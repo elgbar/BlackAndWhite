@@ -2,6 +2,8 @@ package no.kh498.bnw.game.world;
 
 import com.badlogic.gdx.Gdx;
 import no.kh498.bnw.BnW;
+import no.kh498.bnw.game.HexColor;
+import no.kh498.bnw.game.PlayerHandler;
 
 /**
  * @author karl henrik
@@ -24,6 +26,12 @@ public class WorldHandler {
         }
         unload();
         load();
+
+        final PlayerHandler handler = BnW.getGame().getPlayerHandler();
+        handler.endTurn();
+        if (handler.getCurrentPlayer().color != HexColor.WHITE) {
+            handler.endTurn();
+        }
     }
 
     private void unload() {

@@ -35,11 +35,11 @@ public class PlayerHandler {
     }
 
 
-    Player getCurrentPlayer() {
+    public Player getCurrentPlayer() {
         return this.players.get(this.currPlayerIndex);
     }
 
-    void endTurn() {
+    public void endTurn() {
         this.currPlayerIndex++;
         if (this.currPlayerIndex == this.players.size()) {
             this.currPlayerIndex = 0;
