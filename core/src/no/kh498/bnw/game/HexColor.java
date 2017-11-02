@@ -9,9 +9,9 @@ import java.util.HashMap;
  */
 @SuppressWarnings("GwtInconsistentSerializableClass")
 public enum HexColor {
-    WHITE(0.8f),
-    GRAY(0.4f),
-    BLACK(0.25f);
+    WHITE(0.9f),
+    GRAY(0.55f),
+    DARK_GRAY(0.3f);
 
     private final Color shade;
     private final HashMap<Float, Color> ColorCache = new HashMap<>();

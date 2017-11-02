@@ -40,7 +40,7 @@ public class Obstacles extends World {
             }
             else if (coord.getGridX() == 2 && coord.getGridZ() == 3) {
                 data.type = HexType.DIAMOND;
-                data.color = HexColor.BLACK;
+                data.color = HexColor.DARK_GRAY;
             }
             else if (coord.getGridX() == 6 && coord.getGridZ() == 1) {
                 data.type = HexType.DIAMOND;

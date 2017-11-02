@@ -16,7 +16,7 @@ public class Game {
     public Game() {
         this.playerHandler = new PlayerHandler();
         this.playerHandler.addPlayer(HexColor.WHITE);
-        this.playerHandler.addPlayer(HexColor.BLACK);
+        this.playerHandler.addPlayer(HexColor.DARK_GRAY);
 
         this.worldHandler = new WorldHandler();
     }

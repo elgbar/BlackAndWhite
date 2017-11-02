@@ -30,7 +30,7 @@ public class Simple extends World {
             final HexagonData data = HexUtil.getData(hexagon);
             data.type = HexType.JEWEL;
             if (hexagon.getCubeCoordinate().getGridX() == 1) {
-                data.color = HexColor.BLACK;
+                data.color = HexColor.DARK_GRAY;
             }
             else if (hexagon.getCubeCoordinate().getGridX() == 3) {
                 data.color = HexColor.WHITE;
