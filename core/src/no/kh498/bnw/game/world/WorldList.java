@@ -8,10 +8,8 @@ import no.kh498.bnw.game.world.worlds.Simple;
  */
 @SuppressWarnings("GwtInconsistentSerializableClass")
 public enum WorldList {
-
-
-    OBSTACLES(new Obstacles()),
-    SIMPLE(new Simple());
+    SIMPLE(new Simple()),
+    OBSTACLES(new Obstacles());
 
     private final World world;
 

@@ -28,11 +28,10 @@ public class BnW extends ApplicationAdapter {
 
     public static Game getGame() { return game;}
 
-
     private static PolygonSpriteBatch polyBatch;
     private static OrthographicCamera camera;
 
-    private VerticesRenderer verticesRenderer;
+    private static VerticesRenderer verticesRenderer;
     private OutlineRenderer outlineRenderer;
 
     public static void updateResolution(final int width, final int height) {
@@ -49,7 +48,7 @@ public class BnW extends ApplicationAdapter {
         polyBatch = new PolygonSpriteBatch();
         updateResolution(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        this.verticesRenderer = new VerticesRenderer(camera);
+        verticesRenderer = new VerticesRenderer(camera);
         this.outlineRenderer = new OutlineRenderer(camera);
 
         this.font = new BitmapFont(true);
@@ -66,9 +65,9 @@ public class BnW extends ApplicationAdapter {
         //noinspection unchecked
         for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons()) {
             final HexagonData data = HexUtil.getData(hexagon);
-            data.type.render(this.verticesRenderer, data.color, hexagon);
+            data.type.render(verticesRenderer, data.color, hexagon);
         }
-        this.verticesRenderer.flush();
+        verticesRenderer.flush();
 
         for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons()) {
             this.outlineRenderer.drawOutline(hexagon);
@@ -106,5 +105,9 @@ public class BnW extends ApplicationAdapter {
 
     @Override
     public void dispose() {
+    }
+
+    public static void flush() {
+        verticesRenderer.flush();
     }
 }

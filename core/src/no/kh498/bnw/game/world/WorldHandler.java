@@ -1,6 +1,7 @@
 package no.kh498.bnw.game.world;
 
 import com.badlogic.gdx.Gdx;
+import no.kh498.bnw.BnW;
 
 /**
  * @author karl henrik
@@ -8,20 +9,29 @@ import com.badlogic.gdx.Gdx;
 public class WorldHandler {
 
     private World world;
-    private int worldNr = -1;
+    private int worldNr = 0;
 
     public WorldHandler() {
-        nextWorld();
+        load();
     }
 
     public void nextWorld() {
         this.worldNr++;
+
+        //Make the worlds loop
         if (this.worldNr == WorldList.values().length) {
             this.worldNr = 0;
         }
-        if (this.world != null) {
-            this.world.unload();
-        }
+        unload();
+        load();
+    }
+
+    private void unload() {
+        this.world.unload();
+        BnW.flush();
+    }
+
+    private void load() {
         final WorldList nextWorld = WorldList.values()[this.worldNr];
         this.world = nextWorld.getWorld();
         this.world.load();
