@@ -1,7 +1,10 @@
 package no.kh498.bnw.game.world;
 
 import no.kh498.bnw.hexagon.HexagonData;
-import org.codetome.hexameter.core.api.*;
+import org.codetome.hexameter.core.api.HexagonOrientation;
+import org.codetome.hexameter.core.api.HexagonalGrid;
+import org.codetome.hexameter.core.api.HexagonalGridCalculator;
+import org.codetome.hexameter.core.api.HexagonalGridLayout;
 
 /**
  * @author karl henrik
@@ -30,19 +33,7 @@ public abstract class World {
         return this.calc;
     }
 
-    public void load() {
-        final HexagonalGridBuilder<HexagonData> builder = new HexagonalGridBuilder<>();
-        builder.setGridHeight(DEFAULT_GRID_RADIUS);
-        builder.setGridWidth(DEFAULT_GRID_RADIUS);
-        builder.setGridLayout(DEFAULT_GRID_LAYOUT);
-        builder.setOrientation(DEFAULT_ORIENTATION);
-        builder.setRadius(DEFAULT_RADIUS);
-        this.grid = builder.build();
-
-        //noinspection unchecked
-        this.calc = builder.buildCalculatorFor(this.grid);
-    }
-
+    public abstract void load();
 
     public void unload() {
         this.grid = null;
