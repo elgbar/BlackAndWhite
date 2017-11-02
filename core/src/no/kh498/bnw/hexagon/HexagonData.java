@@ -11,7 +11,8 @@ public class HexagonData extends DefaultSatelliteData {
 
 
     public static float DIM = 0.75f;
-    public static float BRIGHT = 1.0f;
+    public static float BRIGHT = 0.9f;
+    public static float SELECTED = 0.1f;
 
     /**
      * The color of the hexagon

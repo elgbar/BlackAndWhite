@@ -7,6 +7,9 @@ import no.kh498.bnw.hexagon.HexagonData;
  */
 public class Player {
 
+    public static final int ATTACK_COST = 2;
+    public static final int REINFORCE_COST = 1;
+
     public HexColor color;
 
 
@@ -14,17 +17,20 @@ public class Player {
         this.color = color;
     }
 
-    void makeMove(final HexagonData data) {
+    int makeMove(final HexagonData data) {
         if (data.color != this.color) {
             if (data.type.shouldChangeColor()) {
                 data.color = this.color;
             }
             else {
                 data.type = data.type.getPrevLevel();
+
             }
+            return ATTACK_COST;
         }
         else {
             data.type = data.type.getNextLevel();
+            return REINFORCE_COST;
         }
     }
 }

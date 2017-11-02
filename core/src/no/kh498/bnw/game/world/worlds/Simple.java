@@ -36,7 +36,7 @@ public class Simple extends World {
                 data.color = HexColor.WHITE;
             }
             else {
-                data.type = HexType.HALF;
+                data.type = HexType.FLAT;
             }
             hexagon.setSatelliteData(data);
         }

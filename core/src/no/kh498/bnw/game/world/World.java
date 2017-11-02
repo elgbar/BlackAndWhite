@@ -11,7 +11,7 @@ import org.codetome.hexameter.core.api.HexagonalGridLayout;
  */
 public abstract class World {
 
-    protected static final int DEFAULT_GRID_RADIUS = 5;
+    protected static final int DEFAULT_GRID_RADIUS = 7;
     protected static final HexagonalGridLayout DEFAULT_GRID_LAYOUT = HexagonalGridLayout.HEXAGONAL;
     protected static final HexagonOrientation DEFAULT_ORIENTATION = HexagonOrientation.FLAT_TOP;
     protected static final double DEFAULT_RADIUS = 40;

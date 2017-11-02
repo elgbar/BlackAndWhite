@@ -18,7 +18,6 @@ import org.codetome.hexameter.core.api.Hexagon;
 import org.codetome.hexameter.core.internal.GridData;
 
 import java.util.Collection;
-import java.util.HashSet;
 
 public class BnW extends ApplicationAdapter {
 
@@ -36,6 +35,11 @@ public class BnW extends ApplicationAdapter {
 
     private static VerticesRenderer verticesRenderer;
     private OutlineRenderer outlineRenderer;
+
+
+    private static final String help =
+        "Click a highlighted hexagons to make a move.\n" + "It costs 2 movement points to attack and 1 to reinforce\n" +
+        "Press 'e' to end turn\n" + "Press 'n' for next map\n";
 
     public static void updateResolution(final int width, final int height) {
         camera.setToOrtho(true, width, height);
@@ -67,9 +71,11 @@ public class BnW extends ApplicationAdapter {
 
         //check the hexagon in the player's mouse
         String hexInfo = "";
-        final Collection<Hexagon<HexagonData>> highlighted = new HashSet<>();
+        final Collection<Hexagon<HexagonData>> highlighted = game.getPlayerHandler().getHighlighted();
 
         final Hexagon<HexagonData> currHex = HexUtil.getHexagon(Gdx.input.getX(), Gdx.input.getY());
+//        HashSet<Hexagon<HexagonData>> highlighted = new HashSet<>();
+
 
         if (currHex != null) {
             final HexagonData data = HexUtil.getData(currHex);
@@ -81,10 +87,11 @@ public class BnW extends ApplicationAdapter {
 
 
             //All neighbor and itself
-            if (game.getPlayerHandler().canReach(currHex)) {
-                highlighted.addAll(getGame().getGrid().getNeighborsOf(currHex));
-                highlighted.add(currHex);
-            }
+//            if (game.getPlayerHandler().canReach(currHex)) {
+//                highlighted.addAll(getGame().getGrid().getNeighborsOf(currHex));
+//                highlighted.add(currHex);
+//                conn = HexUtil.connectedAdjacentHexagons(currHex);
+//            }
         }
 
         //Render the hexagons
@@ -92,13 +99,23 @@ public class BnW extends ApplicationAdapter {
         for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons()) {
             final HexagonData data = HexUtil.getData(hexagon);
 
-            if (highlighted.size() > 0 &&
-                (!highlighted.contains(hexagon) || !game.getPlayerHandler().canReach(hexagon) ||
-                 !data.type.canChange())) {
-                data.brightness = HexagonData.DIM;
+//            if (highlighted.size() > 0 &&
+//                (!highlighted.contains(hexagon) || !game.getPlayerHandler().canReach(hexagon) ||
+//                 !data.type.canChange())) {
+//                data.brightness = HexagonData.DIM;
+//            }
+//            else {
+//                data.brightness = HexagonData.BRIGHT;
+//            }
+            if (highlighted.contains(hexagon) && data.type.canChange()) {
+                data.brightness = HexagonData.BRIGHT;
             }
             else {
-                data.brightness = HexagonData.BRIGHT;
+                data.brightness = HexagonData.DIM;
+            }
+
+            if (hexagon.equals(currHex)) {
+                data.brightness += HexagonData.SELECTED;
             }
 
             data.type.render(verticesRenderer, data.color, data.brightness, hexagon);
@@ -116,14 +133,20 @@ public class BnW extends ApplicationAdapter {
         this.font.draw(polyBatch, "Player: " + game.getCurrentPlayer().color + " Moves left: " +
                                   game.getPlayerHandler().getMovesLeft(), 0,
                        Gdx.graphics.getHeight() - this.font.getLineHeight() * 2);
-        this.font.draw(polyBatch, "Hex info: " + hexInfo, 0, Gdx.graphics.getHeight() - this.font.getLineHeight() * 3);
 
-        if (printDebug) {
+        if (printHelp) {
+            this.font.draw(polyBatch, help, 0, Gdx.graphics.getHeight() - this.font.getLineHeight() * 6);
+        }
+        else if (printDebug) {
+
             final GridData gridData = game.getGrid().getGridData();
             final String gridInfo =
-                "Grid data: dimensions: " + gridData.getGridWidth() + ", " + gridData.getGridHeight();
+                "Grid data: dimensions: " + gridData.getGridWidth() + ", " + gridData.getGridHeight() +
+                " connectedHexagons: " + (highlighted == null ? 0 : highlighted.size());
 
             this.font.draw(polyBatch, gridInfo, 0, Gdx.graphics.getHeight() - this.font.getLineHeight() * 4);
+            this.font
+                .draw(polyBatch, "Hex info: " + hexInfo, 0, Gdx.graphics.getHeight() - this.font.getLineHeight() * 3);
 
         }
         polyBatch.end();

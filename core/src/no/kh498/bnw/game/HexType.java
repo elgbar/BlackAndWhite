@@ -93,7 +93,7 @@ public enum HexType {
     }
 
     public boolean canChange() {
-        return this.level > 0 && this.level + 1 < levels.length;
+        return this.level > 0;
     }
 
     public HexType getPrevLevel() {
