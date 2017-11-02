@@ -1,8 +1,6 @@
 package no.kh498.bnw.game;
 
-import no.kh498.bnw.hexagon.HexUtil;
 import no.kh498.bnw.hexagon.HexagonData;
-import org.codetome.hexameter.core.api.Hexagon;
 
 /**
  * @author karl henrik
@@ -28,24 +26,5 @@ public class Player {
         else {
             data.type = data.type.getNextLevel();
         }
-    }
-
-    int calculateMoves() {
-        int sum = 0;
-        int hexes = 0;
-        for (final Hexagon<HexagonData> hex : HexUtil.getHexagons()) {
-            final HexagonData data = HexUtil.getData(hex);
-            if (data.color == this.color) {
-                hexes++;
-                sum += data.type.level;
-            }
-        }
-
-        final int suggestedMoves = sum / hexes;
-
-        if (suggestedMoves < PlayerHandler.MIN_MOVES) {
-            return PlayerHandler.MIN_MOVES;
-        }
-        return suggestedMoves;
     }
 }

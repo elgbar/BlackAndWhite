@@ -39,7 +39,7 @@ public class PlayerHandler {
         if (this.currPlayerIndex == this.players.size()) {
             this.currPlayerIndex = 0;
         }
-        this.movesLeft = getCurrentPlayer().calculateMoves();
+        this.movesLeft = calculateMoves();
     }
 
     public boolean canReach(final Hexagon<HexagonData> hexagon) {
@@ -77,8 +77,29 @@ public class PlayerHandler {
 
     public int getMovesLeft() {
         if (this.movesLeft == -1) {
-            this.movesLeft = getCurrentPlayer().calculateMoves();
+            this.movesLeft = calculateMoves();
         }
         return this.movesLeft;
+    }
+
+    int calculateMoves() {
+        int sum = 0;
+        int hexes = 0;
+        final HexColor plrColor = getCurrentPlayer().color;
+
+        for (final Hexagon<HexagonData> hex : HexUtil.getHexagons()) {
+            final HexagonData data = HexUtil.getData(hex);
+            if (data.color == plrColor) {
+                hexes++;
+                sum += data.type.level;
+            }
+        }
+
+        final int suggestedMoves = sum / hexes;
+
+        if (suggestedMoves < PlayerHandler.MIN_MOVES) {
+            return PlayerHandler.MIN_MOVES;
+        }
+        return suggestedMoves;
     }
 }
