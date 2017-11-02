@@ -19,25 +19,23 @@ public class HexUtil {
         return BnW.getGame().getGrid().getByPixelCoordinate(x, y).orElse(null);
     }
 
-    private static ArrayList<Hexagon<HexagonData>> hexs;
+    private static ArrayList<Hexagon<HexagonData>> hexes = new ArrayList<>();
     private static int worldHash;
 
     public static ArrayList<Hexagon<HexagonData>> getHexagons(final HexagonalGrid<HexagonData> grid) {
-        if (hexs == null) {
-            hexs = new ArrayList<>();
-            final rx.Observable<Hexagon<HexagonData>> hexagons = grid.getHexagons();
-            hexagons.forEach(hexs::add);
-        }
-        return hexs;
+        final ArrayList<Hexagon<HexagonData>> hexes = new ArrayList<>();
+        final rx.Observable<Hexagon<HexagonData>> hexagons = grid.getHexagons();
+        hexagons.forEach(hexes::add);
+        return hexes;
     }
 
     public static ArrayList<Hexagon<HexagonData>> getHexagons() {
-        if (hexs == null || BnW.getGame().getWorld().hashCode() != worldHash) {
-            System.out.println("regenerating the grid");
-            hexs = getHexagons(BnW.getGame().getGrid());
+        if (hexes.size() == 0 || BnW.getGame().getWorld().hashCode() != worldHash) {
+            System.out.println("regenerating the grid | old size " + hexes.size());
+            hexes = getHexagons(BnW.getGame().getGrid());
             worldHash = BnW.getGame().getWorld().hashCode();
         }
-        return hexs;
+        return hexes;
     }
 
 }
