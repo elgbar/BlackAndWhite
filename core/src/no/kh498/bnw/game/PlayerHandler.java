@@ -42,7 +42,7 @@ public class PlayerHandler {
         this.movesLeft = getCurrentPlayer().calculateMoves();
     }
 
-    private boolean canReach(final Hexagon<HexagonData> hexagon) {
+    public boolean canReach(final Hexagon<HexagonData> hexagon) {
         final HexColor currColor = getCurrentPlayer().color;
 
         if (HexUtil.getData(hexagon).color == currColor) {
@@ -73,7 +73,6 @@ public class PlayerHandler {
                 endTurn();
             }
         }
-        hexagon.setSatelliteData(data);
     }
 
     public int getMovesLeft() {

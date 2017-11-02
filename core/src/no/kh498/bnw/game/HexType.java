@@ -108,7 +108,7 @@ public enum HexType {
         return levels[this.level + 1];
     }
 
-    public void render(final VerticesRenderer verticesRenderer, final HexColor color,
+    public void render(final VerticesRenderer verticesRenderer, final HexColor color, final float brightness,
                        final Hexagon<HexagonData> hexagon) {
         final List<Point> points;
         final Point center = Point.fromPosition(hexagon.getCenterX(), hexagon.getCenterY());
@@ -116,7 +116,7 @@ public enum HexType {
         points.add(center);
 
         for (final Surface sur : this.surfaces) {
-            sur.render(verticesRenderer, color, points);
+            sur.render(verticesRenderer, color, brightness, points);
         }
     }
 
@@ -161,7 +161,8 @@ public enum HexType {
 
         private static final float[] vertices = new float[6];
 
-        void render(final VerticesRenderer verticesRenderer, final HexColor color, final List<Point> points) {
+        void render(final VerticesRenderer verticesRenderer, final HexColor color, final float brightness,
+                    final List<Point> points) {
 
             final Point p1 = points.get(this.v1);
             vertices[0] = (float) p1.getCoordinateX();
@@ -175,7 +176,7 @@ public enum HexType {
             vertices[4] = (float) p3.getCoordinateX();
             vertices[5] = (float) p3.getCoordinateY();
 
-            verticesRenderer.drawTriangle(color.shade(this.shade).toFloatBits(), vertices);
+            verticesRenderer.drawTriangle(color.shade(this.shade * brightness).toFloatBits(), vertices);
         }
     }
 }

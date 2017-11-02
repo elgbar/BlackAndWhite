@@ -17,6 +17,9 @@ import org.codetome.hexameter.core.api.CubeCoordinate;
 import org.codetome.hexameter.core.api.Hexagon;
 import org.codetome.hexameter.core.internal.GridData;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 public class BnW extends ApplicationAdapter {
 
 
@@ -62,10 +65,42 @@ public class BnW extends ApplicationAdapter {
         Gdx.gl.glClearColor(color.r, color.g, color.b, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        //check the hexagon in the player's mouse
+        String hexInfo = "";
+        final Collection<Hexagon<HexagonData>> highlighted = new HashSet<>();
+
+        final Hexagon<HexagonData> currHex = HexUtil.getHexagon(Gdx.input.getX(), Gdx.input.getY());
+
+        if (currHex != null) {
+            final HexagonData data = HexUtil.getData(currHex);
+            hexInfo = data.color + " level " + data.type.level;
+            if (printDebug) {
+                final CubeCoordinate coord = currHex.getCubeCoordinate();
+                hexInfo += " Cube coord: " + coord.getGridX() + ", " + coord.getGridY() + ", " + coord.getGridZ();
+            }
+
+
+            //All neighbor and itself
+            if (game.getPlayerHandler().canReach(currHex)) {
+                highlighted.addAll(getGame().getGrid().getNeighborsOf(currHex));
+                highlighted.add(currHex);
+            }
+        }
+
+        //Render the hexagons
         //noinspection unchecked
         for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons()) {
             final HexagonData data = HexUtil.getData(hexagon);
-            data.type.render(verticesRenderer, data.color, hexagon);
+
+            if (highlighted.size() > 0 &&
+                (!highlighted.contains(hexagon) || !game.getPlayerHandler().canReach(hexagon))) {
+                data.brightness = HexagonData.DIM;
+            }
+            else {
+                data.brightness = HexagonData.BRIGHT;
+            }
+
+            data.type.render(verticesRenderer, data.color, data.brightness, hexagon);
         }
         verticesRenderer.flush();
 
@@ -73,17 +108,7 @@ public class BnW extends ApplicationAdapter {
             this.outlineRenderer.drawOutline(hexagon);
         }
 
-        String hexInfo = "";
-        final Hexagon<HexagonData> hex = HexUtil.getHexagon(Gdx.input.getX(), Gdx.input.getY());
-        if (hex != null) {
-            final HexagonData data = HexUtil.getData(hex);
-            hexInfo = data.color + " level " + data.type.level;
-            if (printDebug) {
-                final CubeCoordinate coord = hex.getCubeCoordinate();
-                hexInfo += " Cube coord: " + coord.getGridX() + ", " + coord.getGridY() + ", " + coord.getGridZ();
-            }
-        }
-
+        //render the text
         polyBatch.begin();
         this.font.draw(polyBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0,
                        Gdx.graphics.getHeight() - this.font.getLineHeight());

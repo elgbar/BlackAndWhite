@@ -9,9 +9,22 @@ import org.codetome.hexameter.core.api.defaults.DefaultSatelliteData;
  */
 public class HexagonData extends DefaultSatelliteData {
 
-    public HexColor color = HexColor.GRAY;
-    public HexType type = HexType.FLAT;
 
+    public static float DIM = 0.75f;
+    public static float BRIGHT = 1.0f;
+
+    /**
+     * The color of the hexagon
+     */
+    public HexColor color = HexColor.GRAY;
+    /**
+     * The type of the hexagon
+     */
+    public HexType type = HexType.FLAT;
+    /**
+     * Modifier of how bright the hex should be
+     */
+    public float brightness = BRIGHT;
 
     @Override
     public boolean equals(final Object o) {
