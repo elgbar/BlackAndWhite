@@ -45,7 +45,7 @@ public class PlayerHandler {
             this.currPlayerIndex = 0;
         }
         this.movesLeft = calculateMoves();
-        generateHighlightedHexes();
+        calculateHighlightedHexes();
     }
 
     public boolean canReach(final Hexagon<HexagonData> hexagon) {
@@ -82,7 +82,7 @@ public class PlayerHandler {
         }
 
         //update the highlighted map
-        generateHighlightedHexes();
+        calculateHighlightedHexes();
     }
 
     public int getMovesLeft() {
@@ -113,7 +113,7 @@ public class PlayerHandler {
         return suggestedMoves;
     }
 
-    private void generateHighlightedHexes() {
+    private void calculateHighlightedHexes() {
         final HashSet<Hexagon<HexagonData>> highlighted = new HashSet<>();
 
         final HexColor color = getCurrentPlayer().color;
@@ -136,7 +136,7 @@ public class PlayerHandler {
         //TODO find a better way of doing this
         final int newHash = BnW.getGame().getWorld().hashCode();
         if (this.highlighted == null || this.worldHash != newHash) {
-            generateHighlightedHexes();
+            calculateHighlightedHexes();
             this.worldHash = newHash;
         }
         return this.highlighted;
