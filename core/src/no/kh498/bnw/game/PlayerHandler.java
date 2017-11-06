@@ -101,7 +101,7 @@ public class PlayerHandler {
             final HexagonData data = HexUtil.getData(hex);
             if (data.color == plrColor) {
 //                hexes++;
-                sum += data.type.level / 2;
+                sum += (data.type.level + 1) / 2;
             }
         }
 
