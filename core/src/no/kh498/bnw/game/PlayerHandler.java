@@ -123,7 +123,7 @@ public class PlayerHandler {
                 highlighted.add(lhex);
             }
         }
-        if (this.getMovesLeft() > Player.ATTACK_COST) {
+        if (this.getMovesLeft() >= Player.ATTACK_COST) {
             this.highlighted = HexUtil.adjacentHexagons(highlighted);
         }
         else {
