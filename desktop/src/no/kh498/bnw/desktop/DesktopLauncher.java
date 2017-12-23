@@ -10,13 +10,13 @@ public class DesktopLauncher {
 
     public static void main(final String[] arg) {
         final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.resizable = false;
-        config.vSyncEnabled = false;
-        config.foregroundFPS = 300;
-        config.backgroundFPS = 10;
+        config.resizable = false;    //Resizing breaks the width/height ratio of the hexes //TODO fix resizing
+        config.vSyncEnabled = true;  //Why not? it's not like this is a competitive FPS
+        config.foregroundFPS = 1024; //Basically no limit
+        config.backgroundFPS = 10;   //Do not consume unnecessary resources when in the background
         config.width = 1366;
-        config.addIcon("icons\\icon_32.PNG", Files.FileType.Internal);
         config.height = 768;
+        config.addIcon("icons\\icon_32.PNG", Files.FileType.Internal);
         new LwjglApplication(new BnW(), config);
     }
 }
