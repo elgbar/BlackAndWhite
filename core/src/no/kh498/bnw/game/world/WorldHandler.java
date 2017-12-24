@@ -28,6 +28,8 @@ public class WorldHandler {
         load();
 
         final PlayerHandler handler = BnW.getGame().getPlayerHandler();
+
+        //make the white player always start, and with the correct movement points.
         handler.endTurn();
         if (handler.getCurrentPlayer().color != HexColor.WHITE) {
             handler.endTurn();

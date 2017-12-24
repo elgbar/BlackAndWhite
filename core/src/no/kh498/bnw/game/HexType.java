@@ -27,25 +27,25 @@ public enum HexType {
           new Surface(0, 3, 2, 0.79f),  //  / ‾-__  \
           new Surface(0, 5, 4, 0.89f),  // 3------‾--0
           new Surface(0, 4, 3, 0.98f)), //  \  _--‾ /
-                                                       //   2-----1
+                                                         //   2-----1
 
     FLAT(1,new Surface(0, 1, 5, 1.00f),    //   4-----5
          new Surface(1, 4, 5, 1.00f),      //  /|   / |\
          new Surface(1, 2, 4, 1.00f),      // 3 |  /  | 0
          new Surface(2, 3, 4, 1.00f)),     //  \| /   |/
-                                                          //   2-----1
+                                                            //   2-----1
 
     HALF(2,new Surface(0, 1, 5, 0.78f),   //   4-----5
          new Surface(1, 2, 5, 0.78f),     //  /|   / |\
          new Surface(2, 4, 5, 0.98f),     // 3 |  /  | 0
          new Surface(2, 3, 4, 0.98f)),    //  \| /   |/
-                                                         //   2-----1
+                                                           //   2-----1
 
     JEWEL(3,new Surface(0, 1, 5, 0.64f),  //   4-----5
           new Surface(1, 3, 5, 0.78f),    //  / _--‾ |\
           new Surface(1, 2, 3, 0.83f),    // 3-‾     | 0
           new Surface(3, 4, 5, 0.98f)),   //  \ ‾--_ |/
-                                                         //   2-----1
+                                                           //   2-----1
 
     CUBE(4,new Surface(6, 1, 0, 0.68f),   //   4-----5
          new Surface(6, 0, 5, 0.68f),     //  /  \ /  \
