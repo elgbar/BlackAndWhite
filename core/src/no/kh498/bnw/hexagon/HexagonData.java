@@ -9,9 +9,12 @@ import org.codetome.hexameter.core.api.defaults.DefaultSatelliteData;
  */
 public class HexagonData extends DefaultSatelliteData {
 
-
+    /* Shade brightness modifier for hexagons */
+    //Cannot move to
     public static float DIM = 0.75f;
+    //Can move to
     public static float BRIGHT = 0.9f;
+    //mouse hovering over, add this to the current hex under the mouse
     public static float SELECTED = 0.1f;
 
     /**
@@ -25,7 +28,7 @@ public class HexagonData extends DefaultSatelliteData {
     /**
      * Modifier of how bright the hex should be
      */
-    public float brightness = BRIGHT;
+    public float brightness = DIM;
 
     @Override
     public boolean equals(final Object o) {

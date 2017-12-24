@@ -22,8 +22,8 @@ import java.util.Collection;
 public class BnW extends ApplicationAdapter {
 
 
-    public static boolean printDebug;
-    public static boolean printHelp;
+    public static boolean printDebug = false;
+    public static boolean printHelp = true;
 
     private BitmapFont font;
     private static Game game;
@@ -98,35 +98,13 @@ public class BnW extends ApplicationAdapter {
                 final CubeCoordinate coord = currHex.getCubeCoordinate();
                 hexInfo += " Cube coord: " + coord.getGridX() + ", " + coord.getGridY() + ", " + coord.getGridZ();
             }
-
-
-            //All neighbor and itself
-//            if (game.getPlayerHandler().canReach(currHex)) {
-//                highlighted.addAll(getGame().getGrid().getNeighborsOf(currHex));
-//                highlighted.add(currHex);
-//                conn = HexUtil.connectedAdjacentHexagons(currHex);
-//            }
         }
 
         //Render the hexagons
-        //noinspection unchecked
         for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons()) {
             final HexagonData data = HexUtil.getData(hexagon);
-
-//            if (highlighted.size() > 0 &&
-//                (!highlighted.contains(hexagon) || !game.getPlayerHandler().canReach(hexagon) ||
-//                 !data.type.canChange())) {
-//                data.brightness = HexagonData.DIM;
-//            }
-//            else {
-//                data.brightness = HexagonData.BRIGHT;
-//            }
-            if (highlighted.contains(hexagon) && data.type.canChange()) {
-                data.brightness = HexagonData.BRIGHT;
-            }
-            else {
-                data.brightness = HexagonData.DIM;
-            }
+            data.brightness =
+                highlighted.contains(hexagon) && data.type.canChange() ? HexagonData.BRIGHT : HexagonData.DIM;
 
             if (hexagon.equals(currHex)) {
                 data.brightness += HexagonData.SELECTED;
@@ -140,27 +118,29 @@ public class BnW extends ApplicationAdapter {
             this.outlineRenderer.drawOutline(hexagon);
         }
 
+        final GridData gridData = game.getGrid().getGridData();
+        final String gridInfo = "Grid data: dimensions: " + gridData.getGridWidth() + ", " + gridData.getGridHeight() +
+                                " connectedHexagons: " + (highlighted == null ? 0 : highlighted.size());
+
+        write(gridInfo, hexInfo);
+    }
+
+    private void write(final String gridInfo, final String hexInfo) {
+        final int height = Gdx.graphics.getHeight();
+        final float lineHeight = this.font.getLineHeight();
+
         //render the text
         polyBatch.begin();
-        this.font.draw(polyBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0,
-                       Gdx.graphics.getHeight() - this.font.getLineHeight());
+        this.font.draw(polyBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, height - lineHeight);
         this.font.draw(polyBatch, "Player: " + game.getCurrentPlayer().color + " Moves left: " +
-                                  game.getPlayerHandler().getMovesLeft(), 0,
-                       Gdx.graphics.getHeight() - this.font.getLineHeight() * 2);
+                                  game.getPlayerHandler().getMovesLeft(), 0, height - lineHeight * 2);
 
         if (printHelp) {
-            this.font.draw(polyBatch, help, 0, Gdx.graphics.getHeight() - this.font.getLineHeight() * 6);
+            this.font.draw(polyBatch, help, 0, height - lineHeight * 6);
         }
         else if (printDebug) {
-
-            final GridData gridData = game.getGrid().getGridData();
-            final String gridInfo =
-                "Grid data: dimensions: " + gridData.getGridWidth() + ", " + gridData.getGridHeight() +
-                " connectedHexagons: " + (highlighted == null ? 0 : highlighted.size());
-
-            this.font.draw(polyBatch, gridInfo, 0, Gdx.graphics.getHeight() - this.font.getLineHeight() * 4);
-            this.font
-                .draw(polyBatch, "Hex info: " + hexInfo, 0, Gdx.graphics.getHeight() - this.font.getLineHeight() * 3);
+            this.font.draw(polyBatch, gridInfo, 0, height - lineHeight * 4);
+            this.font.draw(polyBatch, "Hex info: " + hexInfo, 0, height - lineHeight * 3);
 
         }
         polyBatch.end();

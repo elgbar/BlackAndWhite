@@ -12,20 +12,28 @@ import no.kh498.bnw.BnW;
 
 public class VerticesRenderer implements Disposable {
 
-//    public static void main(String[] args) {
-//        LwjglApplication app = new LwjglApplication(new MeshTutorial1(), "Mesh Tutorial 1", 800, 600, true);
-//    }
+    //@formatter:off //TODO read this from file?
+    private static final String VERT_SHADER =
+        "attribute vec2 a_position;\n" +
+        "attribute vec4 a_color;\n" +
+        "uniform mat4 u_projTrans;\n" +
+        "varying vec4 vColor;\n" +
+        "void main() {\n" +
+        "	vColor = a_color;\n" +
+        "	gl_Position =  u_projTrans * vec4(a_position.xy, 0.0, 1.0);\n" +
+        "}";
 
-    public static final String VERT_SHADER =
-        "attribute vec2 a_position;\n" + "attribute vec4 a_color;\n" + "uniform mat4 u_projTrans;\n" +
-        "varying vec4 vColor;\n" + "void main() {\n" + "	vColor = a_color;\n" +
-        "	gl_Position =  u_projTrans * vec4(a_position.xy, 0.0, 1.0);\n" + "}";
+    private static final String FRAG_SHADER =
+        "#ifdef GL_ES\n" +
+        "precision mediump float;\n" +
+        "#endif\n" +
+        "varying vec4 vColor;\n" +
+        "void main() {\n" +
+        "	gl_FragColor = vColor;\n" +
+        "}";
+    //@formatter:on
 
-    public static final String FRAG_SHADER =
-        "#ifdef GL_ES\n" + "precision mediump float;\n" + "#endif\n" + "varying vec4 vColor;\n" + "void main() {\n" +
-        "	gl_FragColor = vColor;\n" + "}";
-
-    protected static ShaderProgram createMeshShader() {
+    private static ShaderProgram createMeshShader() {
         ShaderProgram.pedantic = false;
         final ShaderProgram shader = new ShaderProgram(VERT_SHADER, FRAG_SHADER);
         final String log = shader.getLog();
@@ -38,23 +46,23 @@ public class VerticesRenderer implements Disposable {
         return shader;
     }
 
-    Mesh mesh;
-    ShaderProgram shader;
+    private final Mesh mesh;
+    private final ShaderProgram shader;
 
     //Position attribute - (x, y)
-    public static final int POSITION_COMPONENTS = 2;
+    private static final int POSITION_COMPONENTS = 2;
 
     //Color attribute - (r, g, b, a)
-    public static final int COLOR_COMPONENTS = 1;
+    private static final int COLOR_COMPONENTS = 1;
 
     //Total number of components for all attributes
-    public static final int NUM_COMPONENTS = POSITION_COMPONENTS + COLOR_COMPONENTS;
+    private static final int NUM_COMPONENTS = POSITION_COMPONENTS + COLOR_COMPONENTS;
 
     //The maximum number of triangles our mesh will hold
-    public static int MAX_TRIS = 384; // each hexagon has 4 to 6 vertices, and there will be a least 64 hexagons
+    private static final int MAX_TRIS = 384; // each hexagon has 4 to 6 vertices, and there will be a least 64 hexagons
 
     //The maximum number of vertices our mesh will hold
-    public static final int MAX_VERTS = MAX_TRIS * 3;
+    private static final int MAX_VERTS = MAX_TRIS * 3;
 
     //The array which holds all the data, interleaved like so:
     //    x, y, r, g, b, a
