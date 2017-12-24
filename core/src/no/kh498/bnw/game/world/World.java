@@ -3,7 +3,7 @@ package no.kh498.bnw.game.world;
 import no.kh498.bnw.hexagon.HexagonData;
 import org.codetome.hexameter.core.api.HexagonOrientation;
 import org.codetome.hexameter.core.api.HexagonalGrid;
-import org.codetome.hexameter.core.api.HexagonalGridCalculator;
+import org.codetome.hexameter.core.api.HexagonalGridBuilder;
 import org.codetome.hexameter.core.api.HexagonalGridLayout;
 
 /**
@@ -11,13 +11,16 @@ import org.codetome.hexameter.core.api.HexagonalGridLayout;
  */
 public abstract class World {
 
-    protected static final int DEFAULT_GRID_RADIUS = 7;
-    protected static final HexagonalGridLayout DEFAULT_GRID_LAYOUT = HexagonalGridLayout.HEXAGONAL;
-    protected static final HexagonOrientation DEFAULT_ORIENTATION = HexagonOrientation.FLAT_TOP;
-    protected static final double DEFAULT_RADIUS = 40;
+    private static final int DEFAULT_GRID_RADIUS = 7;
+    private static final HexagonalGridLayout DEFAULT_GRID_LAYOUT = HexagonalGridLayout.HEXAGONAL;
+    private static final HexagonOrientation DEFAULT_ORIENTATION = HexagonOrientation.FLAT_TOP;
+    private static final double DEFAULT_RADIUS = 40;
 
     protected HexagonalGrid<HexagonData> grid;
-    protected HexagonalGridCalculator<HexagonData> calc;
+
+    protected World() {
+
+    }
 
     public HexagonalGrid<HexagonData> getGrid() {
         if (this.grid == null) {
@@ -26,18 +29,40 @@ public abstract class World {
         return this.grid;
     }
 
-    public HexagonalGridCalculator<HexagonData> getCalc() {
-        if (this.calc == null) {
-            throw new WorldNotLoadedException();
-        }
-        return this.calc;
+
+    public void load() {
+        this.grid = finalizeGridBuilder(defaultGridBuilder());
+        finalizeWorld();
     }
 
-    public abstract void load();
+    /**
+     * @param builder
+     *     The builder to finalize
+     *
+     * @return The final grid, ready to be populated
+     */
+    protected abstract HexagonalGrid<HexagonData> finalizeGridBuilder(HexagonalGridBuilder<HexagonData> builder);
+
+    /**
+     * Make the world unique by changing the hexes in the world
+     */
+    protected abstract void finalizeWorld();
+
+    /**
+     * @return A default grid
+     */
+    private HexagonalGridBuilder<HexagonData> defaultGridBuilder() {
+        final HexagonalGridBuilder<HexagonData> builder = new HexagonalGridBuilder<>();
+        builder.setGridHeight(DEFAULT_GRID_RADIUS);
+        builder.setGridWidth(DEFAULT_GRID_RADIUS);
+        builder.setGridLayout(DEFAULT_GRID_LAYOUT);
+        builder.setOrientation(DEFAULT_ORIENTATION);
+        builder.setRadius(DEFAULT_RADIUS);
+        return builder;
+    }
 
     public void unload() {
         this.grid = null;
-        this.calc = null;
     }
 
     @Override
