@@ -100,11 +100,8 @@ public class InputListener implements InputProcessor {
     public boolean touchDragged(final int screenX, final int screenY, final int pointer) {
         final float x = -Gdx.input.getDeltaX();
         final float y = -Gdx.input.getDeltaY();
+        moveCamera(x, y);
 
-        this.changedX += x;
-        this.changedY += y;
-
-        BnW.getCamera().translate(x, y);
         return true;
     }
 
@@ -116,6 +113,13 @@ public class InputListener implements InputProcessor {
     @Override
     public boolean scrolled(final int amount) {
         return false;
+    }
+
+    public void moveCamera(final float deltaX, final float deltaY) {
+        this.changedX += deltaX;
+        this.changedY += deltaY;
+
+        BnW.getCamera().translate(deltaX, deltaY);
     }
 
     private boolean changeHex(final int screenX, final int screenY) {

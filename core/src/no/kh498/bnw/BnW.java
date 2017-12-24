@@ -57,21 +57,20 @@ public class BnW extends ApplicationAdapter {
 
     @Override
     public void create() {
-        game = new Game();
+        inputListener = new InputListener();
+        Gdx.input.setInputProcessor(inputListener);
 
         /* Other */
         camera = new OrthographicCamera();
         polyBatch = new PolygonSpriteBatch();
         updateResolution(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
+        game = new Game();
+
         verticesRenderer = new VerticesRenderer();
         this.outlineRenderer = new OutlineRenderer();
 
         this.font = new BitmapFont(true);
-
-        this.inputListener = new InputListener();
-
-        Gdx.input.setInputProcessor(inputListener);
     }
 
     @Override

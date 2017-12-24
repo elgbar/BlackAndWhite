@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import no.kh498.bnw.BnW;
 import no.kh498.bnw.game.HexColor;
 import no.kh498.bnw.game.PlayerHandler;
+import no.kh498.bnw.input.InputListener;
+import org.codetome.hexameter.core.internal.GridData;
 
 /**
  * @author karl henrik
@@ -37,6 +39,10 @@ public class WorldHandler {
     }
 
     private void unload() {
+        //reset camera
+        final InputListener listener = BnW.getInputListener();
+        listener.moveCamera(-listener.getChangedX(), -listener.getChangedY());
+
         this.world.unload();
         BnW.flush();
     }
@@ -45,6 +51,16 @@ public class WorldHandler {
         final WorldList nextWorld = WorldList.values()[this.worldNr];
         this.world = nextWorld.getWorld();
         this.world.load();
+
+        final InputListener listener = BnW.getInputListener();
+
+        final GridData data = this.world.grid.getGridData();
+
+        //center of the grid
+        final float x = (float) ((data.getGridWidth() * data.getHexagonWidth()) / 2);
+        final float y = (float) ((data.getGridHeight() * data.getHexagonHeight()) / 2);
+        listener.moveCamera(x - Gdx.graphics.getWidth() / 2, y - Gdx.graphics.getHeight() / 2);
+
         Gdx.graphics.setTitle("BnW - " + nextWorld.name().toLowerCase());
         System.out.println("World " + nextWorld + " loaded");
     }
