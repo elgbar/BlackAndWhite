@@ -19,6 +19,17 @@ public class InputListener implements InputProcessor {
     private int windowedHeight = -1;
     private int windowedWidth = -1;
 
+    private float changedX = 0;
+    private float changedY = 0;
+
+    public float getChangedX() {
+        return this.changedX;
+    }
+
+    public float getChangedY() {
+        return this.changedY;
+    }
+
     @Override
     public boolean keyDown(final int keycode) {
         if (Input.Keys.ESCAPE == keycode) {
@@ -64,7 +75,6 @@ public class InputListener implements InputProcessor {
 
     @Override
     public boolean keyTyped(final char character) {
-
         switch (character) {
             case 'e':
                 BnW.getGame().endTurn();
@@ -83,17 +93,6 @@ public class InputListener implements InputProcessor {
     @Override
     public boolean touchUp(final int screenX, final int screenY, final int pointer, final int button) {
         return false;
-    }
-
-    private float changedX = 0;
-    private float changedY = 0;
-
-    public float getChangedX() {
-        return this.changedX;
-    }
-
-    public float getChangedY() {
-        return this.changedY;
     }
 
     @Override
