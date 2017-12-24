@@ -10,9 +10,9 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import no.kh498.bnw.game.Game;
 import no.kh498.bnw.hexagon.HexUtil;
 import no.kh498.bnw.hexagon.HexagonData;
-import no.kh498.bnw.hexagon.InputListener;
 import no.kh498.bnw.hexagon.renderer.OutlineRenderer;
 import no.kh498.bnw.hexagon.renderer.VerticesRenderer;
+import no.kh498.bnw.input.InputListener;
 import org.codetome.hexameter.core.api.CubeCoordinate;
 import org.codetome.hexameter.core.api.Hexagon;
 import org.codetome.hexameter.core.internal.GridData;
@@ -27,8 +27,17 @@ public class BnW extends ApplicationAdapter {
 
     private BitmapFont font;
     private static Game game;
+    private static InputListener inputListener;
 
     public static Game getGame() { return game;}
+
+    public static OrthographicCamera getCamera() {
+        return camera;
+    }
+
+    public static InputListener getInputListener() {
+        return inputListener;
+    }
 
     private static PolygonSpriteBatch polyBatch;
     private static OrthographicCamera camera;
@@ -55,12 +64,14 @@ public class BnW extends ApplicationAdapter {
         polyBatch = new PolygonSpriteBatch();
         updateResolution(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        verticesRenderer = new VerticesRenderer(camera);
-        this.outlineRenderer = new OutlineRenderer(camera);
+        verticesRenderer = new VerticesRenderer();
+        this.outlineRenderer = new OutlineRenderer();
 
         this.font = new BitmapFont(true);
 
-        Gdx.input.setInputProcessor(new InputListener());
+        this.inputListener = new InputListener();
+
+        Gdx.input.setInputProcessor(inputListener);
     }
 
     @Override
@@ -69,11 +80,14 @@ public class BnW extends ApplicationAdapter {
         Gdx.gl.glClearColor(color.r, color.g, color.b, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
+        camera.update();
+
         //check the hexagon in the player's mouse
         String hexInfo = "";
         final Collection<Hexagon<HexagonData>> highlighted = game.getPlayerHandler().getHighlighted();
 
-        final Hexagon<HexagonData> currHex = HexUtil.getHexagon(Gdx.input.getX(), Gdx.input.getY());
+        final Hexagon<HexagonData> currHex = HexUtil.getCursorHexagon();
 //        HashSet<Hexagon<HexagonData>> highlighted = new HashSet<>();
 
 

@@ -1,5 +1,6 @@
 package no.kh498.bnw.hexagon;
 
+import com.badlogic.gdx.Gdx;
 import no.kh498.bnw.BnW;
 import no.kh498.bnw.game.HexColor;
 import org.codetome.hexameter.core.api.Hexagon;
@@ -33,10 +34,19 @@ public class HexUtil {
      * @param y
      *     screen y
      *
-     * @return Get the hexagon at a given screen location or {@code null} if nothing is found
+     * @return Get the hexagon at a given (inaccurate) screen location or {@code null} if nothing is found
      */
     public static Hexagon<HexagonData> getHexagon(final int x, final int y) {
         return BnW.getGame().getGrid().getByPixelCoordinate(x, y).orElse(null);
+    }
+
+    /**
+     * @return Get the hexagon at the cursor or {@code null} if nothing is found
+     */
+    public static Hexagon<HexagonData> getCursorHexagon() {
+        final int x = Gdx.input.getX() + (int) BnW.getInputListener().getChangedX();
+        final int y = Gdx.input.getY() + (int) BnW.getInputListener().getChangedY();
+        return getHexagon(x, y);
     }
 
     /**

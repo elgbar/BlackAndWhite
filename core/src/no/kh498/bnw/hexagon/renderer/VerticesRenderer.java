@@ -1,10 +1,14 @@
 package no.kh498.bnw.hexagon.renderer;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import no.kh498.bnw.BnW;
 
 public class VerticesRenderer implements Disposable {
 
@@ -35,7 +39,6 @@ public class VerticesRenderer implements Disposable {
     }
 
     Mesh mesh;
-    OrthographicCamera cam;
     ShaderProgram shader;
 
     //Position attribute - (x, y)
@@ -63,7 +66,7 @@ public class VerticesRenderer implements Disposable {
     //The index position
     private int idx = 0;
 
-    public VerticesRenderer(final OrthographicCamera cam) {
+    public VerticesRenderer() {
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -72,7 +75,6 @@ public class VerticesRenderer implements Disposable {
                              new VertexAttribute(VertexAttributes.Usage.ColorPacked, 4, "a_color"));
 
         this.shader = createMeshShader();
-        this.cam = cam;
     }
 
     public void flush() {
@@ -99,7 +101,7 @@ public class VerticesRenderer implements Disposable {
         this.shader.begin();
 
         //update the projection matrix so our triangles are rendered in 2D
-        this.shader.setUniformMatrix("u_projTrans", this.cam.combined);
+        this.shader.setUniformMatrix("u_projTrans", BnW.getCamera().combined);
 
         //render the mesh
         this.mesh.render(this.shader, GL20.GL_TRIANGLES, 0, vertexCount);

@@ -1,9 +1,9 @@
 package no.kh498.bnw.hexagon.renderer;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import no.kh498.bnw.BnW;
 import no.kh498.bnw.hexagon.HexUtil;
 import no.kh498.bnw.hexagon.HexagonData;
 import org.codetome.hexameter.core.api.Hexagon;
@@ -17,11 +17,9 @@ import java.util.List;
 public class OutlineRenderer {
 
     private final ShapeRenderer lineRenderer;
-    private final OrthographicCamera cam;
 
-    public OutlineRenderer(final OrthographicCamera cam) {
+    public OutlineRenderer() {
         this.lineRenderer = new ShapeRenderer();
-        this.cam = cam;
     }
 
     public void drawOutline(final Hexagon<HexagonData> hex) {
@@ -45,7 +43,7 @@ public class OutlineRenderer {
 
     private void drawLine(final Vector2 start, final Vector2 end, final Color color) {
 //        Gdx.gl.glLineWidth(2.0F);
-        this.lineRenderer.setProjectionMatrix(this.cam.combined);
+        this.lineRenderer.setProjectionMatrix(BnW.getCamera().combined);
         this.lineRenderer.begin(ShapeRenderer.ShapeType.Line);
         this.lineRenderer.setColor(color);
         this.lineRenderer.line(start, end);

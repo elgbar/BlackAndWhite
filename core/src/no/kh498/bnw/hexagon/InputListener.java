@@ -1,9 +1,11 @@
-package no.kh498.bnw.hexagon;
+package no.kh498.bnw.input;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import no.kh498.bnw.BnW;
+import no.kh498.bnw.hexagon.HexUtil;
+import no.kh498.bnw.hexagon.HexagonData;
 import org.codetome.hexameter.core.api.Hexagon;
 
 /**
@@ -79,10 +81,27 @@ public class InputListener implements InputProcessor {
         return false;
     }
 
+    private float changedX = 0;
+    private float changedY = 0;
+
+    public float getChangedX() {
+        return this.changedX;
+    }
+
+    public float getChangedY() {
+        return this.changedY;
+    }
+
     @Override
     public boolean touchDragged(final int screenX, final int screenY, final int pointer) {
-//        return changeHex(screenX, screenY);
-        return false;
+        final float x = -Gdx.input.getDeltaX();
+        final float y = -Gdx.input.getDeltaY();
+
+        this.changedX += x;
+        this.changedY += y;
+
+        BnW.getCamera().translate(x, y);
+        return true;
     }
 
     @Override
@@ -97,7 +116,8 @@ public class InputListener implements InputProcessor {
 
     private boolean changeHex(final int screenX, final int screenY) {
         //noinspection unchecked
-        final Hexagon<HexagonData> hex = HexUtil.getHexagon(screenX, screenY);
+        final Hexagon<HexagonData> hex =
+            HexUtil.getHexagon(screenX + (int) this.changedX, screenY + (int) this.changedY);
         if (hex != null) {
             BnW.getGame().getPlayerHandler().makeMove(hex);
             return true;
