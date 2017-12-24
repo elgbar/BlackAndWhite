@@ -39,15 +39,19 @@ public class InputListener implements InputProcessor {
                 BnW.updateResolution(this.windowedWidth, this.windowedHeight);
                 Gdx.graphics.setWindowedMode(this.windowedWidth, this.windowedHeight);
             }
+            return true;
         }
         else if (Input.Keys.N == keycode) {
             BnW.getGame().getWorldHandler().nextWorld();
+            return true;
         }
         else if (Input.Keys.F3 == keycode) {
             BnW.printDebug = !BnW.printDebug;
+            return true;
         }
         else if (Input.Keys.F1 == keycode) {
             BnW.printHelp = !BnW.printHelp;
+            return true;
         }
         return false;
     }
