@@ -22,7 +22,6 @@ public class WorldHandler {
     }
 
     public void nextWorld() {
-        BnW.gameOver = false;
         this.worldNr++;
 
         //Make the worlds loop
@@ -42,6 +41,7 @@ public class WorldHandler {
     }
 
     public void load() {
+        BnW.gameOver = false;
         final WorldList nextWorld = WorldList.values()[this.worldNr];
         this.world = nextWorld.getWorld();
         this.world.load();
