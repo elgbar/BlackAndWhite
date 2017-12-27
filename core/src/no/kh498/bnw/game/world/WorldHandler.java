@@ -69,12 +69,11 @@ public class WorldHandler {
     public void centerWorld() {
 
         final GridData data = this.world.grid.getGridData();
-        //center of the grid
-        final float x = (float) ((data.getGridWidth() * data.getHexagonWidth()) / 2);
-        final float y = (float) ((data.getGridHeight() * data.getHexagonHeight()) / 2);
+        final float deltaX = (float) ((data.getGridWidth() * data.getHexagonWidth() - Gdx.graphics.getWidth()) / 2);
+        final float deltaY = (float) ((data.getGridHeight() * data.getHexagonHeight() - Gdx.graphics.getHeight()) / 2);
 
         //put the grid in the center of the world
-        BnW.moveCamera(x - Gdx.graphics.getWidth() / 2, y - Gdx.graphics.getHeight() / 2);
+        BnW.moveCamera(deltaX, deltaY);
     }
 
     public World getWorld() {
