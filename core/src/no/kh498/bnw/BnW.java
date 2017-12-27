@@ -17,6 +17,7 @@ import no.kh498.bnw.hexagon.renderer.OutlineRenderer;
 import no.kh498.bnw.hexagon.renderer.VerticesRenderer;
 import no.kh498.bnw.input.InputListener;
 import no.kh498.bnw.util.HexUtil;
+import no.kh498.bnw.util.StringUtil;
 import org.codetome.hexameter.core.api.CubeCoordinate;
 import org.codetome.hexameter.core.api.Hexagon;
 import org.codetome.hexameter.core.api.Point;
@@ -183,7 +184,7 @@ public class BnW extends ApplicationAdapter {
         if (gameOver) {
             final HexColor currCol = game.getCurrentPlayer().color;
             this.winnerFont.setColor(currCol.inverse());
-            final String winStr = currCol.toString().toLowerCase() + " won!";
+            final String winStr = StringUtil.toTitleCase(currCol.toString()) + " Won!";
             //center the text
             final float x = (Gdx.graphics.getWidth() / 2) - (winStr.length() * this.winnerFont.getSpaceWidth()) / 2;
             this.winnerFont.draw(polyBatch, winStr, x, Gdx.graphics.getHeight() / 2);
