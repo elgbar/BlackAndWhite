@@ -127,8 +127,6 @@ public class BnW extends ApplicationAdapter {
             data.type.render(verticesRenderer, data.color, data.brightness, hexagon);
         }
 
-        System.out.println(camera.combined);
-
         //fake cursor
 //        final float cursorX = (Gdx.input.getX() + changedX) /
 //                              (camera.combined.getScaleX() * camera.viewportWidth / 2);//Gdx.input.getX() + changedX;

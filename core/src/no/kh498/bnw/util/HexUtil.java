@@ -45,7 +45,9 @@ public class HexUtil {
      * @return Get the hexagon at the cursor or {@code null} if nothing is found
      */
     public static Hexagon<HexagonData> getCursorHexagon() {
-        return getHexagon(Gdx.input.getX(), Gdx.input.getY());
+        final float x = Gdx.input.getX() + BnW.getChangedX();
+        final float y = Gdx.input.getY() + BnW.getChangedY();
+        return getHexagon(x, y);
     }
 
     /**
