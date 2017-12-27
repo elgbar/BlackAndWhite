@@ -15,23 +15,28 @@ public class Large extends World {
 
     @Override
     protected void finalizeGridBuilder(final HexagonalGridBuilder<HexagonData> builder) {
-        this.gridRadius = 31;
+        this.gridRadius = 11;
         builder.setGridHeight(this.gridRadius);
         builder.setGridWidth(this.gridRadius);
-        builder.setRadius(10);
+        builder.setRadius(30);
     }
 
     @Override
     protected void finalizeWorld() {
         for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons(this.grid)) {
             final HexagonData data = HexUtil.getData(hexagon);
-            if (hexagon.getCubeCoordinate().getGridX() % 2 == 0) {
-                data.color = HexColor.DARK_GRAY;
+            if (hexagon.getCubeCoordinate().getGridZ() % 4 == 0) {
+                data.color = HexColor.WHITE;
+                data.type = HexType.TRIANGULAR;
             }
             else {
-                data.color = HexColor.WHITE;
+                data.color = HexColor.BLACK;
             }
-            data.type = HexType.FLAT;
+            if (hexagon.getCubeCoordinate().getGridY() % 3 == 0 || hexagon.getCubeCoordinate().getGridZ() % 3 == 0) {
+                data.type = HexType.TRIANGULAR;
+                data.color = HexColor.GRAY;
+            }
+
             hexagon.setSatelliteData(data);
         }
     }
