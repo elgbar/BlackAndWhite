@@ -37,7 +37,7 @@ public abstract class World {
     public void load() {
         final HexagonalGridBuilder<HexagonData> builder = defaultGridBuilder();
         finalizeGridBuilder(builder);
-        this.grid = builder.build();
+        this.grid = new no.kh498.bnw.hexagon.HexagonalGrid<>(builder);
         finalizeWorld();
     }
 
