@@ -124,7 +124,8 @@ public class InputListener implements InputProcessor {
     @Override
     public boolean scrolled(final int amount) {
         if (!ZOOM_ENABLE) {
-            return false;
+            changeHex();
+            return true;
         }
         if (totalZoom <= MIN_ZOOM) {
             if (amount == -1) {
