@@ -14,6 +14,7 @@ public class HexagonData extends DefaultSatelliteData {
     public static float DIM = 0.75f;
     //Can move to
     public static float BRIGHT = 0.9f;
+
     //mouse hovering over, add this to the current hex under the mouse
     public static float SELECTED = 0.1f;
 

@@ -1,15 +1,17 @@
 package no.kh498.bnw.game.world;
 
-import no.kh498.bnw.game.world.worlds.Obstacles;
-import no.kh498.bnw.game.world.worlds.Simple;
+import no.kh498.bnw.game.world.worlds.*;
 
 /**
  * @author karl henrik
  */
 @SuppressWarnings("GwtInconsistentSerializableClass")
 public enum WorldList {
+    BEGINNER(new Beginner()),
     SIMPLE(new Simple()),
-    OBSTACLES(new Obstacles());
+    OBSTACLES(new Obstacles()),
+    WIN_TEST(new WinTest()),
+    LARGE(new Large());
 
     private final World world;
 

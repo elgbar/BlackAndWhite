@@ -4,8 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import no.kh498.bnw.BnW;
-import no.kh498.bnw.hexagon.HexUtil;
 import no.kh498.bnw.hexagon.HexagonData;
+import no.kh498.bnw.util.HexUtil;
+import org.codetome.hexameter.core.api.CubeCoordinate;
 import org.codetome.hexameter.core.api.Hexagon;
 
 /**
@@ -19,16 +20,15 @@ public class InputListener implements InputProcessor {
     private int windowedHeight = -1;
     private int windowedWidth = -1;
 
-    private float changedX = 0;
-    private float changedY = 0;
+    static float totalZoom = 1;
 
-    public float getChangedX() {
-        return this.changedX;
-    }
+    private static final int MIN_MOVE_AMOUNT = 2;
 
-    public float getChangedY() {
-        return this.changedY;
-    }
+    private static final float MIN_ZOOM = 0.15f;
+    private static final float MAX_ZOOM = 3.0f;
+
+    /** Higher means lower zoom speed */
+    private static final int ZOOM_SPEED = 5;
 
     @Override
     public boolean keyDown(final int keycode) {
@@ -37,6 +37,7 @@ public class InputListener implements InputProcessor {
             return true;
         }
         else if (Input.Keys.F == keycode && Gdx.graphics.supportsDisplayModeChange()) {
+
             if (this.windowedHeight == -1 && this.windowedWidth == -1) {
                 this.windowedHeight = Gdx.graphics.getHeight();
                 this.windowedWidth = Gdx.graphics.getWidth();
@@ -50,10 +51,16 @@ public class InputListener implements InputProcessor {
                 BnW.updateResolution(this.windowedWidth, this.windowedHeight);
                 Gdx.graphics.setWindowedMode(this.windowedWidth, this.windowedHeight);
             }
+            BnW.getGame().getWorldHandler().centerWorld();
             return true;
         }
         else if (Input.Keys.N == keycode) {
             BnW.getGame().getWorldHandler().nextWorld();
+            return true;
+        }
+        else if (Input.Keys.R == keycode) {
+            BnW.getGame().getWorldHandler().unload();
+            BnW.getGame().getWorldHandler().load();
             return true;
         }
         else if (Input.Keys.F3 == keycode) {
@@ -62,6 +69,13 @@ public class InputListener implements InputProcessor {
         }
         else if (Input.Keys.F1 == keycode) {
             BnW.printHelp = !BnW.printHelp;
+            return true;
+        }
+        else if (Input.Keys.E == keycode) {
+            if (BnW.gameOver) {
+                return false;
+            }
+            BnW.getGame().endTurn();
             return true;
         }
         return false;
@@ -75,19 +89,12 @@ public class InputListener implements InputProcessor {
 
     @Override
     public boolean keyTyped(final char character) {
-        switch (character) {
-            case 'e':
-                BnW.getGame().endTurn();
-                return true;
-            default:
-                return false;
-        }
-
+        return false;
     }
 
     @Override
     public boolean touchDown(final int screenX, final int screenY, final int pointer, final int button) {
-        return changeHex(screenX, screenY);
+        return changeHex();
     }
 
     @Override
@@ -95,12 +102,17 @@ public class InputListener implements InputProcessor {
         return false;
     }
 
+
     @Override
     public boolean touchDragged(final int screenX, final int screenY, final int pointer) {
-        final float x = -Gdx.input.getDeltaX();
-        final float y = -Gdx.input.getDeltaY();
-        moveCamera(x, y);
+        final float x = -Gdx.input.getDeltaX() * getTotalZoom();
+        final float y = -Gdx.input.getDeltaY() * getTotalZoom();
 
+        //Make the little movements when clicking fast less noticeable
+        if (Math.abs(x) < MIN_MOVE_AMOUNT * getTotalZoom() && Math.abs(y) < MIN_MOVE_AMOUNT * getTotalZoom()) {
+            return false;
+        }
+        BnW.moveCamera(x, y);
         return true;
     }
 
@@ -111,24 +123,66 @@ public class InputListener implements InputProcessor {
 
     @Override
     public boolean scrolled(final int amount) {
-        return false;
+        if (totalZoom <= MIN_ZOOM) {
+            if (amount == -1) {
+                totalZoom = MIN_ZOOM;
+                return false;
+            }
+        }
+        else if (totalZoom >= MAX_ZOOM) {
+            if (amount == 1) {
+                totalZoom = MAX_ZOOM;
+                return false;
+            }
+        }
+        //amount is if we zoom in or out
+        //(totalZoom / (totalZoom + 1)) Makes the zooming become constant (ish) (look at e^x and x/(x+1) in a graph)
+        // 5 is a zoom speed modifier, higher means less zoom pr scroll
+        totalZoom += amount * (totalZoom / (totalZoom + 1)) / ZOOM_SPEED;
+        BnW.getCamera().zoom = totalZoom;
+        System.out.println("totalZoom = " + totalZoom);
+        return true;
     }
 
-    public void moveCamera(final float deltaX, final float deltaY) {
-        this.changedX += deltaX;
-        this.changedY += deltaY;
 
-        BnW.getCamera().translate(deltaX, deltaY);
-    }
+    private boolean changeHex() {
+        if (BnW.gameOver) {
+            return false;
+        }
 
-    private boolean changeHex(final int screenX, final int screenY) {
-        //noinspection unchecked
-        final Hexagon<HexagonData> hex =
-            HexUtil.getHexagon(screenX + (int) this.changedX, screenY + (int) this.changedY);
+        System.out.println("Raw input  = " + Gdx.input.getX() + ", " + Gdx.input.getY());
+        System.out.println("Offset     = " + BnW.getChangedX() + ", " + BnW.getChangedY());
+        System.out.println("Zoom level = " + BnW.getCamera().zoom);
+
+        final int x = Gdx.input.getX() + (int) BnW.getChangedX();
+        final int y = Gdx.input.getY() + (int) BnW.getChangedY();
+
+        System.out.println("Corrected input = " + x + ", " + y);
+
+        final Hexagon<HexagonData> foundHex = HexUtil.getHexagon(x, y);
+        if (foundHex != null) {
+//            HexagonData data = HexUtil.getData(foundHex);
+            System.out.print("Hex found with cube coord: ");
+            final CubeCoordinate coord = foundHex.getCubeCoordinate();
+            System.out.println(", Cube coord: " + coord.getGridX() + ", " + coord.getGridY() + ", " + coord.getGridZ());
+        }
+
+
+        System.out.println();
+
+        final Hexagon<HexagonData> hex = HexUtil.getCursorHexagon();
         if (hex != null) {
             BnW.getGame().getPlayerHandler().makeMove(hex);
             return true;
         }
         return false;
+    }
+
+    public static float getTotalZoom() {
+        return totalZoom;
+    }
+
+    public static void resetTotalZoom() {
+        BnW.getCamera().zoom = totalZoom = 1f;
     }
 }

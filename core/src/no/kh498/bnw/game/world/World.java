@@ -11,10 +11,14 @@ import org.codetome.hexameter.core.api.HexagonalGridLayout;
  */
 public abstract class World {
 
+
+    protected int gridRadius = DEFAULT_GRID_RADIUS;
+
     private static final int DEFAULT_GRID_RADIUS = 7;
     private static final HexagonalGridLayout DEFAULT_GRID_LAYOUT = HexagonalGridLayout.HEXAGONAL;
     private static final HexagonOrientation DEFAULT_ORIENTATION = HexagonOrientation.FLAT_TOP;
     private static final double DEFAULT_RADIUS = 40;
+
 
     protected HexagonalGrid<HexagonData> grid;
 
@@ -31,17 +35,17 @@ public abstract class World {
 
 
     public void load() {
-        this.grid = finalizeGridBuilder(defaultGridBuilder());
+        final HexagonalGridBuilder<HexagonData> builder = defaultGridBuilder();
+        finalizeGridBuilder(builder);
+        this.grid = builder.build();
         finalizeWorld();
     }
 
     /**
      * @param builder
      *     The builder to finalize
-     *
-     * @return The final grid, ready to be populated
      */
-    protected abstract HexagonalGrid<HexagonData> finalizeGridBuilder(HexagonalGridBuilder<HexagonData> builder);
+    protected abstract void finalizeGridBuilder(HexagonalGridBuilder<HexagonData> builder);
 
     /**
      * Make the world unique by changing the hexes in the world

@@ -3,8 +3,10 @@ package no.kh498.bnw.game.world;
 import com.badlogic.gdx.Gdx;
 import no.kh498.bnw.BnW;
 import no.kh498.bnw.game.HexColor;
+import no.kh498.bnw.game.Player;
 import no.kh498.bnw.game.PlayerHandler;
 import no.kh498.bnw.input.InputListener;
+import no.kh498.bnw.util.TimerUtil;
 import org.codetome.hexameter.core.internal.GridData;
 
 /**
@@ -20,6 +22,7 @@ public class WorldHandler {
     }
 
     public void nextWorld() {
+        BnW.gameOver = false;
         this.worldNr++;
 
         //Make the worlds loop
@@ -28,41 +31,50 @@ public class WorldHandler {
         }
         unload();
         load();
-
-        final PlayerHandler handler = BnW.getGame().getPlayerHandler();
-
-        //make the white player always start, and with the correct movement points.
-        handler.endTurn();
-        if (handler.getCurrentPlayer().color != HexColor.WHITE) {
-            handler.endTurn();
-        }
     }
 
-    private void unload() {
+    public void unload() {
         //reset camera
-        final InputListener listener = BnW.getInputListener();
-        listener.moveCamera(-listener.getChangedX(), -listener.getChangedY());
-
+        BnW.moveCamera(-BnW.getChangedX(), -BnW.getChangedY());
+        InputListener.resetTotalZoom();
         this.world.unload();
         BnW.flush();
     }
 
-    private void load() {
+    public void load() {
         final WorldList nextWorld = WorldList.values()[this.worldNr];
         this.world = nextWorld.getWorld();
         this.world.load();
+        centerWorld();
 
-        final InputListener listener = BnW.getInputListener();
+
+        Gdx.graphics.setTitle("BnW - " + nextWorld.name().toLowerCase());
+
+
+        TimerUtil.scheduleTask(() -> {
+            final PlayerHandler handler = BnW.getGame().getPlayerHandler();
+            //make the white player always start, and with the correct movement points.
+            handler.endTurn();
+            if (handler.getCurrentPlayer().color != HexColor.WHITE) {
+                handler.endTurn();
+            }
+
+            for (final Player player : BnW.getGame().getPlayerHandler().getPlayers()) {
+                player.calculateHexagons();
+            }
+            System.out.println("World " + nextWorld + " loaded");
+        }, 0.1f);
+    }
+
+    public void centerWorld() {
 
         final GridData data = this.world.grid.getGridData();
-
         //center of the grid
         final float x = (float) ((data.getGridWidth() * data.getHexagonWidth()) / 2);
         final float y = (float) ((data.getGridHeight() * data.getHexagonHeight()) / 2);
-        listener.moveCamera(x - Gdx.graphics.getWidth() / 2, y - Gdx.graphics.getHeight() / 2);
 
-        Gdx.graphics.setTitle("BnW - " + nextWorld.name().toLowerCase());
-        System.out.println("World " + nextWorld + " loaded");
+        //put the grid in the center of the world
+        BnW.moveCamera(x - Gdx.graphics.getWidth() / 2, y - Gdx.graphics.getHeight() / 2);
     }
 
     public World getWorld() {

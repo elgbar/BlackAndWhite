@@ -1,8 +1,9 @@
-package no.kh498.bnw.hexagon;
+package no.kh498.bnw.util;
 
 import com.badlogic.gdx.Gdx;
 import no.kh498.bnw.BnW;
 import no.kh498.bnw.game.HexColor;
+import no.kh498.bnw.hexagon.HexagonData;
 import org.codetome.hexameter.core.api.Hexagon;
 import org.codetome.hexameter.core.api.HexagonalGrid;
 
@@ -44,8 +45,8 @@ public class HexUtil {
      * @return Get the hexagon at the cursor or {@code null} if nothing is found
      */
     public static Hexagon<HexagonData> getCursorHexagon() {
-        final int x = Gdx.input.getX() + (int) BnW.getInputListener().getChangedX();
-        final int y = Gdx.input.getY() + (int) BnW.getInputListener().getChangedY();
+        final int x = Gdx.input.getX() + (int) BnW.getChangedX();
+        final int y = Gdx.input.getY() + (int) BnW.getChangedY();
         return getHexagon(x, y);
     }
 

@@ -14,11 +14,11 @@ public class Game {
     private final WorldHandler worldHandler;
 
     public Game() {
+        this.worldHandler = new WorldHandler();
+
         this.playerHandler = new PlayerHandler();
         this.playerHandler.addPlayer(HexColor.WHITE);
         this.playerHandler.addPlayer(HexColor.DARK_GRAY);
-
-        this.worldHandler = new WorldHandler();
     }
 
     public PlayerHandler getPlayerHandler() {

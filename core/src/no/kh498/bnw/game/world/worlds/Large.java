@@ -5,39 +5,33 @@ import no.kh498.bnw.game.HexType;
 import no.kh498.bnw.game.world.World;
 import no.kh498.bnw.hexagon.HexagonData;
 import no.kh498.bnw.util.HexUtil;
-import org.codetome.hexameter.core.api.CubeCoordinate;
 import org.codetome.hexameter.core.api.Hexagon;
 import org.codetome.hexameter.core.api.HexagonalGridBuilder;
 
 /**
- * @author kheba
+ * @author karl henrik
  */
-public class Obstacles extends World {
+public class Large extends World {
 
     @Override
     protected void finalizeGridBuilder(final HexagonalGridBuilder<HexagonData> builder) {
-
+        this.gridRadius = 31;
+        builder.setGridHeight(this.gridRadius);
+        builder.setGridWidth(this.gridRadius);
+        builder.setRadius(10);
     }
 
     @Override
     protected void finalizeWorld() {
-        final int centre = (int) Math.floor(this.gridRadius / 2);
-//        System.out.println("centre: " + centre);
         for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons(this.grid)) {
             final HexagonData data = HexUtil.getData(hexagon);
-            final CubeCoordinate coord = hexagon.getCubeCoordinate();
-
-            if (coord.getGridX() == centre && Math.abs(coord.getGridZ()) % 2 == 0) {
-                data.type = HexType.ASYMMETRICAL;
-            }
-            else if (coord.getGridX() == 1 && coord.getGridZ() == 3) {
-                data.type = HexType.DIAMOND;
+            if (hexagon.getCubeCoordinate().getGridX() % 2 == 0) {
                 data.color = HexColor.DARK_GRAY;
             }
-            else if (coord.getGridX() == 5 && coord.getGridZ() == 1) {
-                data.type = HexType.DIAMOND;
+            else {
                 data.color = HexColor.WHITE;
             }
+            data.type = HexType.FLAT;
             hexagon.setSatelliteData(data);
         }
     }

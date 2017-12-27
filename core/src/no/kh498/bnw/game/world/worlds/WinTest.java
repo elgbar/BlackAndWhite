@@ -11,29 +11,24 @@ import org.codetome.hexameter.core.api.HexagonalGridBuilder;
 /**
  * @author karl henrik
  */
-public class Simple extends World {
+public class WinTest extends World {
 
     @Override
-    protected void finalizeGridBuilder(final HexagonalGridBuilder<HexagonData> builder) {
-        this.gridRadius = 5;
-        builder.setGridHeight(this.gridRadius);
-        builder.setGridWidth(this.gridRadius);
-    }
+    protected void finalizeGridBuilder(final HexagonalGridBuilder<HexagonData> builder) { }
 
     @Override
     protected void finalizeWorld() {
+        boolean set = false;
         for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons(this.grid)) {
             final HexagonData data = HexUtil.getData(hexagon);
-            data.type = HexType.JEWEL;
-            if (hexagon.getCubeCoordinate().getGridX() == 0) {
+            if (hexagon.getCubeCoordinate().getGridX() % 2 == 0 && !set) {
                 data.color = HexColor.DARK_GRAY;
-            }
-            else if (hexagon.getCubeCoordinate().getGridX() == 3) {
-                data.color = HexColor.WHITE;
+                set = true;
             }
             else {
-                data.type = HexType.FLAT;
+                data.color = HexColor.WHITE;
             }
+            data.type = HexType.FLAT;
             hexagon.setSatelliteData(data);
         }
     }

@@ -43,7 +43,16 @@ public enum HexColor {
         }
     }
 
+    public Color getColor() {
+        return this.shade;
+    }
+
     public Color inverse() {
         return new Color(1 - this.shade.r, 1 - this.shade.g, 1 - this.shade.b, 1f);
+    }
+
+    @Override
+    public String toString() {
+        return this.name().replace("_", " ").toLowerCase();
     }
 }

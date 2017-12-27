@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import no.kh498.bnw.BnW;
-import no.kh498.bnw.hexagon.HexUtil;
 import no.kh498.bnw.hexagon.HexagonData;
+import no.kh498.bnw.util.HexUtil;
 import org.codetome.hexameter.core.api.Hexagon;
 import org.codetome.hexameter.core.api.Point;
 
