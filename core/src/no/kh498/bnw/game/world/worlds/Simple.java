@@ -26,7 +26,7 @@ public class Simple extends World {
             final HexagonData data = HexUtil.getData(hexagon);
             data.type = HexType.TRIANGULAR;
             if (hexagon.getCubeCoordinate().getGridX() == 0) {
-                data.color = HexColor.DARK_GRAY;
+                data.color = HexColor.BLACK;
             }
             else if (hexagon.getCubeCoordinate().getGridX() == 3) {
                 data.color = HexColor.WHITE;

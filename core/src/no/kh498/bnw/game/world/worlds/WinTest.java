@@ -22,7 +22,7 @@ public class WinTest extends World {
         for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons(this.grid)) {
             final HexagonData data = HexUtil.getData(hexagon);
             if (hexagon.getCubeCoordinate().getGridX() % 2 == 0 && !set) {
-                data.color = HexColor.DARK_GRAY;
+                data.color = HexColor.BLACK;
                 set = true;
             }
             else {

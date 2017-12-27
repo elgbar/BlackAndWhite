@@ -32,7 +32,7 @@ public class Beginner extends World {
                 data.color = HexColor.WHITE;
             }
             else if (x == 1 && z == 0) {
-                data.color = HexColor.DARK_GRAY;
+                data.color = HexColor.BLACK;
             }
             hexagon.setSatelliteData(data);
         }

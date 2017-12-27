@@ -11,7 +11,7 @@ import java.util.HashMap;
 public enum HexColor {
     WHITE(0.9f),
     GRAY(0.55f),
-    DARK_GRAY(0.3f);
+    BLACK(0.3f);
 
     private final Color shade;
     private final HashMap<Float, Color> ColorCache = new HashMap<>();
