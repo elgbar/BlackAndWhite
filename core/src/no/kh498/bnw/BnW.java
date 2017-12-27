@@ -68,6 +68,7 @@ public class BnW extends ApplicationAdapter {
         game = new Game();
 
         verticesRenderer = new VerticesRenderer();
+
         this.outlineRenderer = new OutlineRenderer();
 
         final FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/UbuntuMono-R.ttf"));
@@ -123,9 +124,23 @@ public class BnW extends ApplicationAdapter {
             if (hexagon.equals(currHex)) {
                 data.brightness += HexagonData.SELECTED;
             }
-
             data.type.render(verticesRenderer, data.color, data.brightness, hexagon);
         }
+
+        System.out.println(camera.combined);
+
+        //fake cursor
+//        final float cursorX = (Gdx.input.getX() + changedX) /
+//                              (camera.combined.getScaleX() * camera.viewportWidth / 2);//Gdx.input.getX() + changedX;
+//        final float cursorY = (Gdx.input.getY() + changedY) /
+//                              (camera.combined.getScaleY() * camera.viewportHeight / 2);//Gdx.input.getY() + changedY;
+//        final float[] vertices = {cursorX, cursorY, //
+//                                  cursorX - 5, cursorY + 5, //
+//                                  cursorX + 5, cursorY + 5
+//        };
+//        verticesRenderer.drawTriangle(Color.RED.toFloatBits(), vertices);
+
+
         verticesRenderer.flush();
 
         for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons()) {

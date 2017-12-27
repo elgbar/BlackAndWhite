@@ -41,7 +41,6 @@ public class Game {
         return this.worldHandler.getWorld();
     }
 
-
     public HexagonalGrid<HexagonData> getGrid() {
         return getWorld().getGrid();
     }

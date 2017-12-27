@@ -6,7 +6,6 @@ import com.badlogic.gdx.InputProcessor;
 import no.kh498.bnw.BnW;
 import no.kh498.bnw.hexagon.HexagonData;
 import no.kh498.bnw.util.HexUtil;
-import org.codetome.hexameter.core.api.CubeCoordinate;
 import org.codetome.hexameter.core.api.Hexagon;
 
 /**
@@ -20,7 +19,8 @@ public class InputListener implements InputProcessor {
     private int windowedHeight = -1;
     private int windowedWidth = -1;
 
-    static float totalZoom = 1;
+    private static final boolean ZOOM_ENABLE = false;
+    private static float totalZoom = 1;
 
     private static final int MIN_MOVE_AMOUNT = 2;
 
@@ -123,6 +123,9 @@ public class InputListener implements InputProcessor {
 
     @Override
     public boolean scrolled(final int amount) {
+        if (!ZOOM_ENABLE) {
+            return false;
+        }
         if (totalZoom <= MIN_ZOOM) {
             if (amount == -1) {
                 totalZoom = MIN_ZOOM;
@@ -136,7 +139,7 @@ public class InputListener implements InputProcessor {
             }
         }
         //amount is if we zoom in or out
-        //(totalZoom / (totalZoom + 1)) Makes the zooming become constant (ish) (look at e^x and x/(x+1) in a graph)
+        //(totalZoom / (totalZoom + 1)) Makes the zooming become (ish) constant (look at e^-x and x/(x+1) in a graph)
         // 5 is a zoom speed modifier, higher means less zoom pr scroll
         totalZoom += amount * (totalZoom / (totalZoom + 1)) / ZOOM_SPEED;
         BnW.getCamera().zoom = totalZoom;
@@ -149,27 +152,6 @@ public class InputListener implements InputProcessor {
         if (BnW.gameOver) {
             return false;
         }
-
-        System.out.println("Raw input  = " + Gdx.input.getX() + ", " + Gdx.input.getY());
-        System.out.println("Offset     = " + BnW.getChangedX() + ", " + BnW.getChangedY());
-        System.out.println("Zoom level = " + BnW.getCamera().zoom);
-
-        final int x = Gdx.input.getX() + (int) BnW.getChangedX();
-        final int y = Gdx.input.getY() + (int) BnW.getChangedY();
-
-        System.out.println("Corrected input = " + x + ", " + y);
-
-        final Hexagon<HexagonData> foundHex = HexUtil.getHexagon(x, y);
-        if (foundHex != null) {
-//            HexagonData data = HexUtil.getData(foundHex);
-            System.out.print("Hex found with cube coord: ");
-            final CubeCoordinate coord = foundHex.getCubeCoordinate();
-            System.out.println(", Cube coord: " + coord.getGridX() + ", " + coord.getGridY() + ", " + coord.getGridZ());
-        }
-
-
-        System.out.println();
-
         final Hexagon<HexagonData> hex = HexUtil.getCursorHexagon();
         if (hex != null) {
             BnW.getGame().getPlayerHandler().makeMove(hex);

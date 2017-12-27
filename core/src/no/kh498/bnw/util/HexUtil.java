@@ -35,9 +35,9 @@ public class HexUtil {
      * @param y
      *     screen y
      *
-     * @return Get the hexagon at a given (inaccurate) screen location or {@code null} if nothing is found
+     * @return Get the hexagon at a given screen location or {@code null} if nothing is found
      */
-    public static Hexagon<HexagonData> getHexagon(final int x, final int y) {
+    public static Hexagon<HexagonData> getHexagon(final double x, final double y) {
         return BnW.getGame().getGrid().getByPixelCoordinate(x, y).orElse(null);
     }
 
@@ -45,9 +45,7 @@ public class HexUtil {
      * @return Get the hexagon at the cursor or {@code null} if nothing is found
      */
     public static Hexagon<HexagonData> getCursorHexagon() {
-        final int x = Gdx.input.getX() + (int) BnW.getChangedX();
-        final int y = Gdx.input.getY() + (int) BnW.getChangedY();
-        return getHexagon(x, y);
+        return getHexagon(Gdx.input.getX(), Gdx.input.getY());
     }
 
     /**
