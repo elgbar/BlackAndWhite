@@ -41,10 +41,10 @@ public enum HexType {
 //         new Surface(2, 3, 4, 0.98f)),    //  \| /   |/
                                                            //   2-----1
 
-    JEWEL(2,new Surface(0, 1, 5, 0.64f),  //   4-----5
-          new Surface(1, 3, 5, 0.78f),    //  / _--‾ |\
-          new Surface(1, 2, 3, 0.83f),    // 3-‾     | 0
-          new Surface(3, 4, 5, 0.98f)),   //  \ ‾--_ |/
+    TRIANGULAR(2, new Surface(0, 1, 5, 0.64f),  //   4-----5
+               new Surface(1, 3, 5, 0.78f),    //  / _--‾ |\
+               new Surface(1, 2, 3, 0.83f),    // 3-‾     | 0
+               new Surface(3, 4, 5, 0.98f)),   //  \ ‾--_ |/
                                                            //   2-----1
 
     CUBE(3,new Surface(6, 1, 0, 0.68f),   //   4-----5

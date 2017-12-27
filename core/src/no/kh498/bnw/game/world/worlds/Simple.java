@@ -24,7 +24,7 @@ public class Simple extends World {
     protected void finalizeWorld() {
         for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons(this.grid)) {
             final HexagonData data = HexUtil.getData(hexagon);
-            data.type = HexType.JEWEL;
+            data.type = HexType.TRIANGULAR;
             if (hexagon.getCubeCoordinate().getGridX() == 0) {
                 data.color = HexColor.DARK_GRAY;
             }
