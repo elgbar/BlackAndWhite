@@ -51,16 +51,16 @@ public class InputListener implements InputProcessor {
                 BnW.updateResolution(this.windowedWidth, this.windowedHeight);
                 Gdx.graphics.setWindowedMode(this.windowedWidth, this.windowedHeight);
             }
-            BnW.getGame().getWorldHandler().centerWorld();
+            BnW.getGameHandler().getWorldHandler().centerWorld();
             return true;
         }
         else if (Input.Keys.N == keycode) {
-            BnW.getGame().getWorldHandler().nextWorld();
+            BnW.getGameHandler().getWorldHandler().nextWorld();
             return true;
         }
         else if (Input.Keys.R == keycode) {
-            BnW.getGame().getWorldHandler().unload();
-            BnW.getGame().getWorldHandler().load();
+            BnW.getGameHandler().getWorldHandler().unload();
+            BnW.getGameHandler().getWorldHandler().load();
             return true;
         }
         else if (Input.Keys.F3 == keycode) {
@@ -75,7 +75,7 @@ public class InputListener implements InputProcessor {
             if (BnW.gameOver) {
                 return false;
             }
-            BnW.getGame().endTurn();
+            BnW.getGameHandler().endTurn();
             return true;
         }
         return false;
@@ -155,7 +155,7 @@ public class InputListener implements InputProcessor {
         }
         final Hexagon<HexagonData> hex = HexUtil.getCursorHexagon();
         if (hex != null) {
-            BnW.getGame().getPlayerHandler().makeMove(hex);
+            BnW.getGameHandler().getPlayerHandler().makeMove(hex);
             return true;
         }
         return false;

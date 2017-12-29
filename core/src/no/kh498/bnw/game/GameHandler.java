@@ -8,12 +8,12 @@ import org.codetome.hexameter.core.api.HexagonalGrid;
 /**
  * @author karl henrik
  */
-public class Game {
+public class GameHandler {
 
     private final PlayerHandler playerHandler;
     private final WorldHandler worldHandler;
 
-    public Game() {
+    public GameHandler() {
         this.worldHandler = new WorldHandler();
 
         this.playerHandler = new PlayerHandler();

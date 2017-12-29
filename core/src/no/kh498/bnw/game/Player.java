@@ -39,7 +39,7 @@ public class Player {
         if (data.color != this.color) {
             if (data.type.shouldChangeColor()) {
 
-                final Player prevOwner = BnW.getGame().getPlayerHandler().getPlayer(data.color);
+                final Player prevOwner = BnW.getGameHandler().getPlayerHandler().getPlayer(data.color);
                 if (prevOwner != null) {
                     prevOwner.hexagons--;
                     if (prevOwner.hexagons == 0) {

@@ -1,6 +1,6 @@
 package no.kh498.bnw;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import no.kh498.bnw.game.Game;
+import no.kh498.bnw.game.GameHandler;
 import no.kh498.bnw.game.HexColor;
 import no.kh498.bnw.game.Player;
 import no.kh498.bnw.hexagon.HexagonData;
@@ -25,14 +25,14 @@ import org.codetome.hexameter.core.internal.GridData;
 
 import java.util.Collection;
 
-public class BnW extends ApplicationAdapter {
+public class BnW extends Game {
 
 
     public static boolean printDebug = false;
     public static boolean printHelp = true;
     public static boolean gameOver = false;
 
-    private static Game game;
+    private static GameHandler gameHandler;
 
     private static float changedX = 0;
     private static float changedY = 0;
@@ -66,7 +66,7 @@ public class BnW extends ApplicationAdapter {
         polyBatch = new PolygonSpriteBatch();
         updateResolution(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        game = new Game();
+        gameHandler = new GameHandler();
 
         verticesRenderer = new VerticesRenderer();
 
@@ -85,7 +85,7 @@ public class BnW extends ApplicationAdapter {
 
     @Override
     public void render() {
-        final Color color = game.getCurrentPlayer().color.shade(0.75f);
+        final Color color = gameHandler.getCurrentPlayer().color.shade(0.75f);
         Gdx.gl.glClearColor(color.r, color.g, color.b, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -94,7 +94,7 @@ public class BnW extends ApplicationAdapter {
 
         //check the hexagon in the player's mouse
         StringBuilder hexInfo = new StringBuilder();
-        final Collection<Hexagon<HexagonData>> highlighted = game.getPlayerHandler().getHighlighted();
+        final Collection<Hexagon<HexagonData>> highlighted = gameHandler.getPlayerHandler().getHighlighted();
 
         final Hexagon<HexagonData> currHex = HexUtil.getCursorHexagon();
 //        HashSet<Hexagon<HexagonData>> highlighted = new HashSet<>();
@@ -146,7 +146,7 @@ public class BnW extends ApplicationAdapter {
             this.outlineRenderer.drawOutline(hexagon);
         }
 
-        final GridData gridData = game.getGrid().getGridData();
+        final GridData gridData = gameHandler.getGrid().getGridData();
         final String gridInfo = "Grid data: dimensions: " + gridData.getGridWidth() + ", " + gridData.getGridHeight() +
                                 " connectedHexagons: " + (highlighted == null ? 0 : highlighted.size());
 
@@ -216,7 +216,7 @@ public class BnW extends ApplicationAdapter {
         return changedY;
     }
 
-    public static Game getGame() { return game;}
+    public static GameHandler getGameHandler() { return gameHandler;}
 
     public static OrthographicCamera getCamera() {
         return camera;

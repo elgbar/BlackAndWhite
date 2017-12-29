@@ -52,14 +52,14 @@ public class WorldHandler {
 
 
         TimerUtil.scheduleTask(() -> {
-            final PlayerHandler handler = BnW.getGame().getPlayerHandler();
+            final PlayerHandler handler = BnW.getGameHandler().getPlayerHandler();
             //make the white player always start, and with the correct movement points.
             handler.endTurn();
             if (handler.getCurrentPlayer().color != HexColor.WHITE) {
                 handler.endTurn();
             }
 
-            for (final Player player : BnW.getGame().getPlayerHandler().getPlayers()) {
+            for (final Player player : BnW.getGameHandler().getPlayerHandler().getPlayers()) {
                 player.calculateHexagons();
             }
             System.out.println("World " + nextWorld + " loaded");

@@ -92,7 +92,7 @@ public class PlayerHandler {
         else if (this.movesLeft < Player.ATTACK_COST) {
             return false;
         }
-        for (final Hexagon<HexagonData> hex : BnW.getGame().getGrid().getNeighborsOf(hexagon)) {
+        for (final Hexagon<HexagonData> hex : BnW.getGameHandler().getGrid().getNeighborsOf(hexagon)) {
             if (HexUtil.getData(hex).color == currColor) {
                 return true;
             }
@@ -177,7 +177,7 @@ public class PlayerHandler {
     public HashSet<Hexagon<HexagonData>> getHighlighted() {
         //if the world changes the highlighted must be regenerated
         //TODO find a better way of doing this
-        final int newHash = BnW.getGame().getWorld().hashCode();
+        final int newHash = BnW.getGameHandler().getWorld().hashCode();
         if (this.highlighted == null || this.worldHash != newHash) {
             calculateHighlightedHexes();
             this.worldHash = newHash;

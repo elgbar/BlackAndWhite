@@ -38,7 +38,7 @@ public class HexUtil {
      * @return Get the hexagon at a given screen location or {@code null} if nothing is found
      */
     public static Hexagon<HexagonData> getHexagon(final double x, final double y) {
-        return BnW.getGame().getGrid().getByPixelCoordinate(x, y).orElse(null);
+        return BnW.getGameHandler().getGrid().getByPixelCoordinate(x, y).orElse(null);
     }
 
     /**
@@ -69,10 +69,10 @@ public class HexUtil {
      * @return All hexagons from the default game grid.
      */
     public static ArrayList<Hexagon<HexagonData>> getHexagons() {
-        if (hexes.size() == 0 || BnW.getGame().getWorld().hashCode() != worldHash) {
+        if (hexes.size() == 0 || BnW.getGameHandler().getWorld().hashCode() != worldHash) {
             System.out.println("regenerating the grid | old size " + hexes.size());
-            hexes = getHexagons(BnW.getGame().getGrid());
-            worldHash = BnW.getGame().getWorld().hashCode();
+            hexes = getHexagons(BnW.getGameHandler().getGrid());
+            worldHash = BnW.getGameHandler().getWorld().hashCode();
         }
         return hexes;
     }
@@ -110,7 +110,7 @@ public class HexUtil {
         visited.add(center);
 
         //check each neighbor
-        for (final Hexagon<HexagonData> neighbor : BnW.getGame().getGrid().getNeighborsOf(center)) {
+        for (final Hexagon<HexagonData> neighbor : BnW.getGameHandler().getGrid().getNeighborsOf(center)) {
             connectedHexagons(neighbor, color, visited);
         }
         return visited;
@@ -126,7 +126,7 @@ public class HexUtil {
         adjacent.addAll(set);
 
         for (final Hexagon<HexagonData> hex : set) {
-            for (final Hexagon<HexagonData> neighbor : BnW.getGame().getGrid().getNeighborsOf(hex)) {
+            for (final Hexagon<HexagonData> neighbor : BnW.getGameHandler().getGrid().getNeighborsOf(hex)) {
                 if (!adjacent.contains(neighbor)) {
                     adjacent.add(neighbor);
                 }
