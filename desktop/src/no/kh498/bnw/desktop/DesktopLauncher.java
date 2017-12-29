@@ -12,7 +12,7 @@ public class DesktopLauncher {
         final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.resizable = false;    //Resizing breaks the width/height ratio of the hexes //TODO fix resizing
         config.vSyncEnabled = true;  //Why not? it's not like this is a competitive FPS
-        config.foregroundFPS = 1024; //Basically no limit
+        config.foregroundFPS = 9999; //Basically no limit
         config.backgroundFPS = 10;   //Do not consume unnecessary resources when in the background
         config.width = 1366;
         config.height = 768;
