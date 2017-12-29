@@ -104,8 +104,8 @@ public class BnW extends Game {
     public void render() {
         final Color color = gameHandler.getCurrentPlayer().color.shade(0.75f);
         Gdx.gl.glClearColor(color.r, color.g, color.b, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT |
+                       (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
 
         camera.update();
 

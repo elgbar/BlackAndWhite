@@ -16,6 +16,7 @@ public class DesktopLauncher {
         config.backgroundFPS = 10;   //Do not consume unnecessary resources when in the background
         config.width = 1366;
         config.height = 768;
+        config.samples = 16; //max out the samples as this isn't a very heavy game.
         config.addIcon("icons\\icon_32.PNG", Files.FileType.Internal);
         new LwjglApplication(new BnW(), config);
     }
