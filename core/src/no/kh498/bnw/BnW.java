@@ -29,8 +29,9 @@ public class BnW extends Game {
 
 
     public static boolean printDebug = false;
-    public static boolean printHelp = true;
+    public static boolean printHelp = false;
     public static boolean gameOver = false;
+    public static boolean printControls = false;
 
     private static GameHandler gameHandler;
 
@@ -39,23 +40,39 @@ public class BnW extends Game {
 
     private static PolygonSpriteBatch polyBatch;
     private static OrthographicCamera camera;
-    private BitmapFont font;
-    private BitmapFont winnerFont;
 
-    private static VerticesRenderer verticesRenderer;
+    private BitmapFont font;
+    private Color defaultColor;
+
+    private VerticesRenderer verticesRenderer;
     private OutlineRenderer outlineRenderer;
 
 
-    private static final String help =
-        "Click a highlighted hexagons to make a move.\n" + "It costs 2 movement points to attack and 1 to reinforce\n" +
-        "Press 'e' to end turn\n" + "Press 'n' for next map\n";
+    //@formatter:off
+    private static final int HELP_LINES = 2;
+    private static final String HELP =
+        "Click a highlighted hexagons to make a move.\n" +
+        "It costs 2 movement points to attack and 1 to reinforce\n" ;
 
+    private static final int CONTROLS_LINES = 9;
+    private static final String CONTROLS =
+        "Press 'E' to end the level.\n" +
+        "Press 'R' to reset the level.\n" +
+        "Press 'F' to toggle fullscreen.\n" +
+        "Press 'N' to switch level.\n" +
+        "Press 'F1' to print help.\n" +
+        "Press 'F2' to print the controls.\n" +
+        "Press 'F3' to print debug information.\n" +
+        "Move mouse while clicking to move world around.\n" +
+        "Scroll is the same as clicking.\n";
+    //@formatter:on
 
     public static void updateResolution(final int width, final int height) {
         camera.setToOrtho(true, width, height);
         polyBatch.setProjectionMatrix(camera.combined);
         changedX = changedY = 0;
     }
+
 
     @Override
     public void create() {
@@ -77,10 +94,10 @@ public class BnW extends Game {
         parameter.size = 24;
         parameter.minFilter = Texture.TextureFilter.Linear;
         parameter.flip = true;
-        this.winnerFont = generator.generateFont(parameter);
+        this.font = generator.generateFont(parameter);
+        this.defaultColor = this.font.getColor().cpy();
         generator.dispose();
 
-        this.font = new BitmapFont(true);
     }
 
     @Override
@@ -110,7 +127,7 @@ public class BnW extends Game {
                 hexInfo.append(", pixel coord points: ");
                 for (final Point point : currHex.getPoints()) {
                     //noinspection NonJREEmulationClassesInClientCode
-                    hexInfo.append(String.format("(%.2f, %.2f) ", point.getCoordinateX(), point.getCoordinateY()));
+                    hexInfo.append(String.format("(%.2f | %.2f) ", point.getCoordinateX(), point.getCoordinateY()));
                 }
 
             }
@@ -158,36 +175,49 @@ public class BnW extends Game {
         final int height = Gdx.graphics.getHeight();
         final float lineHeight = this.font.getLineHeight();
 
+        this.font.setColor(this.defaultColor);
+
         //render the text
         polyBatch.begin();
         this.font.draw(polyBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, height - lineHeight);
-        this.font.draw(polyBatch, "Player: " + game.getCurrentPlayer().color + " Moves left: " +
-                                  game.getPlayerHandler().getMovesLeft(), 0, height - lineHeight * 2);
+        this.font.draw(polyBatch, "Moves left: " + gameHandler.getPlayerHandler().getMovesLeft(), 0,
+                       height - lineHeight * 2);
+        this.font.draw(polyBatch, "Press 'F2' to print the controls", 0, height - lineHeight * 4);
 
-        final StringBuilder sb = new StringBuilder("Player hex info: ");
-        for (final Player player : game.getPlayerHandler().getPlayers()) {
+        final int minPrintLevel = 5;
+
+        final StringBuilder sb = new StringBuilder("Player hex amount: ");
+        for (final Player player : gameHandler.getPlayerHandler().getPlayers()) {
             sb.append(player.color).append(": ").append(player.getHexagons()).append(" ");
         }
 
 
         if (printHelp) {
-            this.font.draw(polyBatch, help, 0, height - lineHeight * 6);
+            this.font.draw(polyBatch, HELP, 0, height - lineHeight * (minPrintLevel + HELP_LINES));
         }
-        else if (printDebug) {
-            this.font
-                .draw(polyBatch, "Cursor: " + Gdx.input.getX() + ", " + Gdx.input.getY(), 0, height - lineHeight * 6);
-            this.font.draw(polyBatch, sb.toString(), 0, height - lineHeight * 5);
-            this.font.draw(polyBatch, gridInfo, 0, height - lineHeight * 4);
-            this.font.draw(polyBatch, "Hex info: " + hexInfo, 0, height - lineHeight * 3);
+
+        if (printControls) {
+            this.font.draw(polyBatch, CONTROLS, 0,
+                           height - lineHeight * (minPrintLevel + (printHelp ? HELP_LINES + 1 : 0) + CONTROLS_LINES));
+        }
+
+        if (printDebug) {
+            //this must be the lowest
+            this.font.draw(polyBatch, "Hex info: " + hexInfo, 0, lineHeight * 4, Gdx.graphics.getWidth(),
+                           Gdx.graphics.getWidth() / 2, true);
+            this.font.draw(polyBatch, sb.toString(), 0, lineHeight * 3);
+            this.font.draw(polyBatch, gridInfo, 0, lineHeight * 2);
+            this.font.draw(polyBatch, "Cursor: " + Gdx.input.getX() + ", " + Gdx.input.getY(), 0, lineHeight);
         }
 
         if (gameOver) {
-            final HexColor currCol = game.getCurrentPlayer().color;
-            this.winnerFont.setColor(currCol.inverse());
+            final HexColor currCol = gameHandler.getCurrentPlayer().color;
+            this.font.setColor(currCol.inverse());
             final String winStr = StringUtil.toTitleCase(currCol.toString()) + " Won!";
             //center the text
-            final float x = (Gdx.graphics.getWidth() / 2) - (winStr.length() * this.winnerFont.getSpaceWidth()) / 2;
-            this.winnerFont.draw(polyBatch, winStr, x, Gdx.graphics.getHeight() / 2);
+            final float x = (Gdx.graphics.getWidth() / 2) - (winStr.length() * this.font.getSpaceWidth()) / 2;
+            this.font.draw(polyBatch, winStr, x, Gdx.graphics.getHeight() / 2);
+            this.font.setColor(this.defaultColor);
         }
 
         polyBatch.end();

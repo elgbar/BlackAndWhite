@@ -71,6 +71,10 @@ public class InputListener implements InputProcessor {
             BnW.printHelp = !BnW.printHelp;
             return true;
         }
+        else if (Input.Keys.F2 == keycode) {
+            BnW.printControls = !BnW.printControls;
+            return true;
+        }
         else if (Input.Keys.E == keycode) {
             if (BnW.gameOver) {
                 return false;
