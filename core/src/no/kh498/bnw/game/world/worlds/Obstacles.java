@@ -7,7 +7,6 @@ import no.kh498.bnw.hexagon.HexagonData;
 import no.kh498.bnw.util.HexUtil;
 import org.codetome.hexameter.core.api.CubeCoordinate;
 import org.codetome.hexameter.core.api.Hexagon;
-import org.codetome.hexameter.core.api.HexagonalGridBuilder;
 
 /**
  * @author kheba
@@ -15,13 +14,8 @@ import org.codetome.hexameter.core.api.HexagonalGridBuilder;
 public class Obstacles extends World {
 
     @Override
-    protected void finalizeGridBuilder(final HexagonalGridBuilder<HexagonData> builder) {
-
-    }
-
-    @Override
     protected void finalizeWorld() {
-        final int centre = (int) Math.floor(this.gridRadius / 2);
+        final int centre = (int) Math.floor(this.getGridRadius() / 2);
 //        System.out.println("centre: " + centre);
         for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons(this.grid)) {
             final HexagonData data = HexUtil.getData(hexagon);
@@ -40,5 +34,10 @@ public class Obstacles extends World {
             }
             hexagon.setSatelliteData(data);
         }
+    }
+
+    @Override
+    protected int getGridRadius() {
+        return DEFAULT_GRID_RADIUS;
     }
 }

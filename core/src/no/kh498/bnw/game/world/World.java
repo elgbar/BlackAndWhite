@@ -11,10 +11,7 @@ import org.codetome.hexameter.core.api.HexagonalGridLayout;
  */
 public abstract class World {
 
-
-    protected int gridRadius = DEFAULT_GRID_RADIUS;
-
-    private static final int DEFAULT_GRID_RADIUS = 7;
+    protected static final int DEFAULT_GRID_RADIUS = 7;
     private static final HexagonalGridLayout DEFAULT_GRID_LAYOUT = HexagonalGridLayout.HEXAGONAL;
     private static final HexagonOrientation DEFAULT_ORIENTATION = HexagonOrientation.FLAT_TOP;
     private static final double DEFAULT_RADIUS = 40;
@@ -33,10 +30,23 @@ public abstract class World {
         return this.grid;
     }
 
-
     public void load() {
         final HexagonalGridBuilder<HexagonData> builder = defaultGridBuilder();
         finalizeGridBuilder(builder);
+
+        builder.setGridHeight(this.getGridRadius());
+        builder.setGridWidth(this.getGridRadius());
+
+        /*
+         * Create a standard way of setting the radius of
+         * formula found with regression (RegPot in geogebra):
+         *  where this.gridRadius = 3,  then builder radius = 100
+         *  where this.gridRadius = 7,  then builder radius = 40
+         *  where this.gridRadius = 11, then builder radius = 30
+         */
+        builder.setRadius(275 * Math.pow(this.getGridRadius(), -0.95));
+        System.out.println("builder.getRadius() = " + builder.getRadius());
+
         this.grid = builder.build();
         finalizeWorld();
     }
@@ -45,12 +55,14 @@ public abstract class World {
      * @param builder
      *     The builder to finalize
      */
-    protected abstract void finalizeGridBuilder(HexagonalGridBuilder<HexagonData> builder);
+    protected void finalizeGridBuilder(final HexagonalGridBuilder<HexagonData> builder) {}
 
     /**
      * Make the world unique by changing the hexes in the world
      */
     protected abstract void finalizeWorld();
+
+    protected abstract int getGridRadius();
 
     /**
      * @return A default grid

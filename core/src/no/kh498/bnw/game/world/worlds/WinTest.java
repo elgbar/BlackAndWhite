@@ -6,6 +6,7 @@ import no.kh498.bnw.game.world.World;
 import no.kh498.bnw.hexagon.HexagonData;
 import no.kh498.bnw.util.HexUtil;
 import org.codetome.hexameter.core.api.Hexagon;
+import org.codetome.hexameter.core.api.HexagonOrientation;
 import org.codetome.hexameter.core.api.HexagonalGridBuilder;
 
 /**
@@ -14,7 +15,9 @@ import org.codetome.hexameter.core.api.HexagonalGridBuilder;
 public class WinTest extends World {
 
     @Override
-    protected void finalizeGridBuilder(final HexagonalGridBuilder<HexagonData> builder) { }
+    protected void finalizeGridBuilder(final HexagonalGridBuilder<HexagonData> builder) {
+        builder.setOrientation(HexagonOrientation.POINTY_TOP);
+    }
 
     @Override
     protected void finalizeWorld() {
@@ -31,5 +34,10 @@ public class WinTest extends World {
             data.type = HexType.FLAT;
             hexagon.setSatelliteData(data);
         }
+    }
+
+    @Override
+    protected int getGridRadius() {
+        return DEFAULT_GRID_RADIUS;
     }
 }
