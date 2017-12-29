@@ -56,7 +56,7 @@ public class BnW extends Game {
 
     private static final int CONTROLS_LINES = 9;
     private static final String CONTROLS =
-        "Press 'E' to end the level.\n" +
+        "Press 'E' to end your turn.\n" +
         "Press 'R' to reset the level.\n" +
         "Press 'F' to toggle fullscreen.\n" +
         "Press 'N' to switch level.\n" +
