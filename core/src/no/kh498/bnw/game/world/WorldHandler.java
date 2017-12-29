@@ -37,7 +37,6 @@ public class WorldHandler {
         BnW.moveCamera(-BnW.getChangedX(), -BnW.getChangedY());
         InputListener.resetTotalZoom();
         this.world.unload();
-        BnW.flush();
     }
 
     public void load() {

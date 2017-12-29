@@ -85,7 +85,7 @@ public class BnW extends Game {
 
         gameHandler = new GameHandler();
 
-        verticesRenderer = new VerticesRenderer();
+        this.verticesRenderer = new VerticesRenderer();
 
         this.outlineRenderer = new OutlineRenderer();
 
@@ -142,20 +142,10 @@ public class BnW extends Game {
             if (hexagon.equals(currHex)) {
                 data.brightness += HexagonData.SELECTED;
             }
-            data.type.render(verticesRenderer, data.color, data.brightness, hexagon);
+            data.type.render(this.verticesRenderer, data.color, data.brightness, hexagon);
         }
 
-        //fake cursor
-//        final float cursorX = (Gdx.input.getX() + changedX) /
-//                              (camera.combined.getScaleX() * camera.viewportWidth / 2);//Gdx.input.getX() + changedX;
-//        final float cursorY = (Gdx.input.getY() + changedY) /
-//                              (camera.combined.getScaleY() * camera.viewportHeight / 2);//Gdx.input.getY() + changedY;
-//        final float[] vertices = {cursorX, cursorY, //
-//                                  cursorX - 5, cursorY + 5, //
-//                                  cursorX + 5, cursorY + 5
-//        };
-//        verticesRenderer.drawTriangle(Color.RED.toFloatBits(), vertices);
-
+        this.verticesRenderer.flush();
 
         this.outlineRenderer.drawGrid();
 
