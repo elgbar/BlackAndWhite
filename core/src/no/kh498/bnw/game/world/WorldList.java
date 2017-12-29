@@ -1,6 +1,9 @@
 package no.kh498.bnw.game.world;
 
-import no.kh498.bnw.game.world.worlds.*;
+import no.kh498.bnw.game.world.worlds.Beginner;
+import no.kh498.bnw.game.world.worlds.Large;
+import no.kh498.bnw.game.world.worlds.Obstacles;
+import no.kh498.bnw.game.world.worlds.Simple;
 
 /**
  * @author karl henrik
@@ -10,7 +13,7 @@ public enum WorldList {
     BEGINNER(new Beginner()),
     SIMPLE(new Simple()),
     OBSTACLES(new Obstacles()),
-    WIN_TEST(new WinTest()),
+    //    WIN_TEST(new WinTest()),
     LARGE(new Large());
 
     private final World world;
