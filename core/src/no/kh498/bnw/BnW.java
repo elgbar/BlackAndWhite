@@ -157,11 +157,7 @@ public class BnW extends Game {
 //        verticesRenderer.drawTriangle(Color.RED.toFloatBits(), vertices);
 
 
-        verticesRenderer.flush();
-
-        for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons()) {
-            this.outlineRenderer.drawOutline(hexagon);
-        }
+        this.outlineRenderer.drawGrid();
 
         final GridData gridData = gameHandler.getGrid().getGridData();
         final String gridInfo = "Grid data: dimensions: " + gridData.getGridWidth() + ", " + gridData.getGridHeight() +
@@ -225,10 +221,9 @@ public class BnW extends Game {
 
     @Override
     public void dispose() {
-    }
-
-    public static void flush() {
-        verticesRenderer.flush();
+        super.dispose();
+        this.verticesRenderer.dispose();
+        this.outlineRenderer.dispose();
     }
 
     public static void moveCamera(final float deltaX, final float deltaY) {
