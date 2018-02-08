@@ -188,6 +188,7 @@ public class BnW extends Game {
         }
 
         if (printDebug) {
+            //TODO hexinfo is fucked up in fullscreen
             //this must be the lowest
             this.font.draw(polyBatch, "Hex info: " + hexInfo, 0, lineHeight * 4, Gdx.graphics.getWidth(),
                            Gdx.graphics.getWidth() / 2, true);

@@ -45,7 +45,6 @@ project(":desktop") {
         compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
     }
 }
 
@@ -89,6 +88,7 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         compile "com.github.czyzby:gdx-kiwi:1.9.1.9.6"
         compile 'org.codetome.hexameter:hexameter.core:2017.1.0'
+        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
     }
 }
 
