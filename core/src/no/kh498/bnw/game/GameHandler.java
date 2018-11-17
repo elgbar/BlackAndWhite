@@ -14,31 +14,31 @@ public class GameHandler {
     private final WorldHandler worldHandler;
 
     public GameHandler() {
-        this.worldHandler = new WorldHandler();
+        worldHandler = new WorldHandler();
 
-        this.playerHandler = new PlayerHandler();
-        this.playerHandler.addPlayer(HexColor.WHITE);
-        this.playerHandler.addPlayer(HexColor.BLACK);
+        playerHandler = new PlayerHandler();
+        playerHandler.addPlayer(HexColor.WHITE, false);
+        playerHandler.addPlayer(HexColor.BLACK, true);
     }
 
     public PlayerHandler getPlayerHandler() {
-        return this.playerHandler;
+        return playerHandler;
     }
 
     public WorldHandler getWorldHandler() {
-        return this.worldHandler;
+        return worldHandler;
     }
 
     public void endTurn() {
-        this.playerHandler.endTurn();
+        playerHandler.endTurn();
     }
 
     public Player getCurrentPlayer() {
-        return this.playerHandler.getCurrentPlayer();
+        return playerHandler.getCurrentPlayer();
     }
 
     public World getWorld() {
-        return this.worldHandler.getWorld();
+        return worldHandler.getWorld();
     }
 
     public HexagonalGrid<HexagonData> getGrid() {

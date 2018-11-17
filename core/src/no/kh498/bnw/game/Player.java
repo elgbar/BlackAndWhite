@@ -15,11 +15,13 @@ public class Player {
     public static final int REINFORCE_COST = 1;
 
     public HexColor color;
+    private boolean isAI;
 
     private int hexagons = -1;
 
-    Player(final HexColor color) {
+    public Player(final HexColor color, boolean isAI) {
         this.color = color;
+        this.isAI = isAI;
         TimerUtil.scheduleTask(this::calculateHexagons, 0.1f);
     }
 
@@ -27,16 +29,16 @@ public class Player {
      * Calculate the number of hexagons this color has
      */
     public void calculateHexagons() {
-        Player.this.hexagons = 0;
+        hexagons = 0;
         for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons()) {
-            if (HexUtil.getData(hexagon).color == Player.this.color) {
-                Player.this.hexagons++;
+            if (HexUtil.getData(hexagon).color == color) {
+                hexagons++;
             }
         }
     }
 
     int makeMove(final HexagonData data) {
-        if (data.color != this.color) {
+        if (data.color != color) {
             if (data.type.shouldChangeColor()) {
 
                 final Player prevOwner = BnW.getGameHandler().getPlayerHandler().getPlayer(data.color);
@@ -46,8 +48,8 @@ public class Player {
                         BnW.gameOver = true;
                     }
                 }
-                this.hexagons++;
-                data.color = this.color;
+                hexagons++;
+                data.color = color;
             }
             else {
                 data.type = data.type.getPrevLevel();
@@ -62,11 +64,15 @@ public class Player {
     }
 
     public int getHexagons() {
-        return this.hexagons;
+        return hexagons;
+    }
+
+    public boolean isAI() {
+        return isAI;
     }
 
     @Override
     public String toString() {
-        return "Player{" + "color=" + this.color + '}';
+        return "Player{" + "color=" + color + '}';
     }
 }

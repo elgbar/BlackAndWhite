@@ -1,6 +1,7 @@
 package no.kh498.bnw.game;
 
 import no.kh498.bnw.BnW;
+import no.kh498.bnw.game.ai.AI;
 import no.kh498.bnw.hexagon.HexagonData;
 import no.kh498.bnw.util.HexUtil;
 import org.codetome.hexameter.core.api.Hexagon;
@@ -31,14 +32,14 @@ public class PlayerHandler {
      * @param color
      *     The color of the player
      */
-    void addPlayer(final HexColor color) {
-        for (final Player player : this.players) {
+    void addPlayer(final HexColor color, boolean ai) {
+        for (final Player player : players) {
             if (player.color == color) {
                 throw new IllegalArgumentException(
                     "The color " + color + " has already been registered as the color of a player");
             }
         }
-        this.players.add(new Player(color));
+        players.add(new Player(color, ai));
     }
 
     /**
@@ -48,7 +49,7 @@ public class PlayerHandler {
      * @return The player object associated with the {@code color} or {@code null} if no player is found
      */
     Player getPlayer(final HexColor color) {
-        for (final Player player : this.players) {
+        for (final Player player : players) {
             if (player.color == color) {
                 return player;
             }
@@ -57,23 +58,36 @@ public class PlayerHandler {
     }
 
     public List<Player> getPlayers() {
-        return this.players;
+        return players;
     }
 
 
     public Player getCurrentPlayer() {
-        return this.players.get(this.currPlayerIndex);
+        return players.get(currPlayerIndex);
     }
 
     /**
      * End the turn for the current player
      */
     public void endTurn() {
-        this.currPlayerIndex++;
-        if (this.currPlayerIndex == this.players.size()) {
-            this.currPlayerIndex = 0;
+        currPlayerIndex++;
+        if (currPlayerIndex == players.size()) {
+            currPlayerIndex = 0;
         }
-        this.movesLeft = calculateMoves();
+        movesLeft = calculateMoves();
+        calculateHighlightedHexes();
+
+        if (getCurrentPlayer().isAI()) {
+            AI.makeMove(getCurrentPlayer(), BnW.getGameHandler().getWorld());
+            if (BnW.gameOver) {
+                return;
+            }
+            endTurn();
+        }
+    }
+
+    public void reset() {
+        movesLeft = calculateMoves();
         calculateHighlightedHexes();
     }
 
@@ -89,7 +103,7 @@ public class PlayerHandler {
         if (HexUtil.getData(hexagon).color == currColor) {
             return true;
         }
-        else if (this.movesLeft < Player.ATTACK_COST) {
+        else if (movesLeft < Player.ATTACK_COST) {
             return false;
         }
         for (final Hexagon<HexagonData> hex : BnW.getGameHandler().getGrid().getNeighborsOf(hexagon)) {
@@ -107,7 +121,8 @@ public class PlayerHandler {
      *     The hexagon to make a move on
      */
     public void makeMove(final Hexagon<HexagonData> hexagon) {
-        if (!canReach(hexagon) || this.movesLeft <= 0) {
+        if (!canReach(hexagon) || movesLeft <= 0) {
+            System.out.println("Cannot reach that!");
             return;
         }
 
@@ -116,7 +131,7 @@ public class PlayerHandler {
 
         final int rem = getCurrentPlayer().makeMove(data);
         if (check != data.hashCode()) {
-            this.movesLeft -= rem;
+            movesLeft -= rem;
         }
 
         //update the highlighted map
@@ -127,10 +142,10 @@ public class PlayerHandler {
      * @return Number of moves left for the current player
      */
     public int getMovesLeft() {
-        if (this.movesLeft == -1) {
-            this.movesLeft = calculateMoves();
+        if (movesLeft == -1) {
+            movesLeft = calculateMoves();
         }
-        return this.movesLeft;
+        return movesLeft;
     }
 
     /**
@@ -163,7 +178,7 @@ public class PlayerHandler {
                 highlighted.add(lhex);
             }
         }
-        if (this.getMovesLeft() >= Player.ATTACK_COST) {
+        if (getMovesLeft() >= Player.ATTACK_COST) {
             this.highlighted = HexUtil.adjacentHexagons(highlighted);
         }
         else {
@@ -178,10 +193,10 @@ public class PlayerHandler {
         //if the world changes the highlighted must be regenerated
         //TODO find a better way of doing this
         final int newHash = BnW.getGameHandler().getWorld().hashCode();
-        if (this.highlighted == null || this.worldHash != newHash) {
+        if (highlighted == null || worldHash != newHash) {
             calculateHighlightedHexes();
-            this.worldHash = newHash;
+            worldHash = newHash;
         }
-        return this.highlighted;
+        return highlighted;
     }
 }

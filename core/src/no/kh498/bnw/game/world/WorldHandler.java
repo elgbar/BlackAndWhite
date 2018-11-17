@@ -2,7 +2,6 @@ package no.kh498.bnw.game.world;
 
 import com.badlogic.gdx.Gdx;
 import no.kh498.bnw.BnW;
-import no.kh498.bnw.game.HexColor;
 import no.kh498.bnw.game.Player;
 import no.kh498.bnw.game.PlayerHandler;
 import no.kh498.bnw.input.InputListener;
@@ -22,11 +21,11 @@ public class WorldHandler {
     }
 
     public void nextWorld() {
-        this.worldNr++;
+        worldNr++;
 
         //Make the worlds loop
-        if (this.worldNr == WorldList.values().length) {
-            this.worldNr = 0;
+        if (worldNr == WorldList.values().length) {
+            worldNr = 0;
         }
         unload();
         load();
@@ -36,14 +35,14 @@ public class WorldHandler {
         //reset camera
         BnW.moveCamera(-BnW.getChangedX(), -BnW.getChangedY());
         InputListener.resetTotalZoom();
-        this.world.unload();
+        world.unload();
     }
 
     public void load() {
         BnW.gameOver = false;
-        final WorldList nextWorld = WorldList.values()[this.worldNr];
-        this.world = nextWorld.getWorld();
-        this.world.load();
+        final WorldList nextWorld = WorldList.values()[worldNr];
+        world = nextWorld.getWorld();
+        world.load();
         centerWorld();
 
 
@@ -53,10 +52,10 @@ public class WorldHandler {
         TimerUtil.scheduleTask(() -> {
             final PlayerHandler handler = BnW.getGameHandler().getPlayerHandler();
             //make the white player always start, and with the correct movement points.
-            handler.endTurn();
-            if (handler.getCurrentPlayer().color != HexColor.WHITE) {
-                handler.endTurn();
-            }
+            handler.reset();
+//            if (handler.getCurrentPlayer().color != HexColor.WHITE) {
+////                handler.endTurn();
+//            }
 
             for (final Player player : BnW.getGameHandler().getPlayerHandler().getPlayers()) {
                 player.calculateHexagons();
@@ -67,15 +66,22 @@ public class WorldHandler {
 
     public void centerWorld() {
 
-        final GridData data = this.world.grid.getGridData();
-        final float deltaX = (float) ((data.getGridWidth() * data.getHexagonWidth() - Gdx.graphics.getWidth()) / 2);
-        final float deltaY = (float) ((data.getGridHeight() * data.getHexagonHeight() - Gdx.graphics.getHeight()) / 2);
+        final GridData data = world.grid.getGridData();
+        final float deltaX = (float) (
+            ((data.getGridWidth() * data.getHexagonWidth() + data.getHexagonWidth() / 2) - Gdx.graphics.getWidth()) /
+            2);
+        final float deltaY = (float) (
+            (((data.getGridHeight() * data.getHexagonHeight()) + (data.getHexagonHeight() / 2)) -
+             Gdx.graphics.getHeight()) / 2);
+//        final float deltaX = (float) ((data.getGridWidth() * data.getHexagonWidth() - Gdx.graphics.getWidth()) / 2);
+//        final float deltaY = (float) ((data.getGridHeight() * data.getHexagonHeight() - Gdx.graphics.getHeight()) /
+// 2);
 
         //put the grid in the center of the world
         BnW.moveCamera(deltaX, deltaY);
     }
 
     public World getWorld() {
-        return this.world;
+        return world;
     }
 }

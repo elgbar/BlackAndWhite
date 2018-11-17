@@ -5,6 +5,8 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import no.kh498.bnw.BnW;
 
+import java.io.File;
+
 public class DesktopLauncher {
 
 
@@ -17,7 +19,7 @@ public class DesktopLauncher {
         config.width = 1366;
         config.height = 768;
         config.samples = 16; //max out the samples as this isn't a very heavy game.
-        config.addIcon("icons\\icon_32.PNG", Files.FileType.Internal);
+        config.addIcon("icons" + File.separatorChar + "icon_32.PNG", Files.FileType.Internal);
         new LwjglApplication(new BnW(), config);
     }
 }

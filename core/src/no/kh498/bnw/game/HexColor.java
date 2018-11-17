@@ -11,7 +11,9 @@ import java.util.HashMap;
 public enum HexColor {
     WHITE(0.9f),
     GRAY(0.55f),
-    BLACK(0.3f);
+    BLACK(0.3f),
+    BLUE(0, 0.5f, 1),
+    ORANGE(1, 0.5f, 0);
 
     private final Color shade;
     private final HashMap<Float, Color> ColorCache = new HashMap<>();
@@ -21,7 +23,7 @@ public enum HexColor {
     }
 
     HexColor(final float r, final float g, final float b) {
-        this.shade = new Color(r, g, b, 1f);
+        shade = new Color(r, g, b, 1f);
     }
 
     /**
@@ -33,26 +35,26 @@ public enum HexColor {
      * @return A shade of a color
      */
     public Color shade(final float percent) {
-        if (!this.ColorCache.containsKey(percent)) {
-            final Color c = new Color(this.shade.r * percent, this.shade.g * percent, this.shade.b * percent, 1f);
-            this.ColorCache.put(percent, c);
+        if (!ColorCache.containsKey(percent)) {
+            final Color c = new Color(shade.r * percent, shade.g * percent, shade.b * percent, 1f);
+            ColorCache.put(percent, c);
             return c;
         }
         else {
-            return this.ColorCache.get(percent);
+            return ColorCache.get(percent);
         }
     }
 
     public Color getColor() {
-        return this.shade;
+        return shade;
     }
 
     public Color inverse() {
-        return new Color(1 - this.shade.r, 1 - this.shade.g, 1 - this.shade.b, 1f);
+        return new Color(1 - shade.r, 1 - shade.g, 1 - shade.b, 1f);
     }
 
     @Override
     public String toString() {
-        return this.name().replace("_", " ").toLowerCase();
+        return name().replace("_", " ").toLowerCase();
     }
 }

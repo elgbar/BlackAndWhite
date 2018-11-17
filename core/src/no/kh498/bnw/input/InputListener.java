@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import no.kh498.bnw.BnW;
+import no.kh498.bnw.game.PlayerHandler;
 import no.kh498.bnw.hexagon.HexagonData;
 import no.kh498.bnw.util.HexUtil;
 import org.codetome.hexameter.core.api.Hexagon;
@@ -13,7 +14,6 @@ import org.codetome.hexameter.core.api.Hexagon;
  * <p>
  * {@inheritDoc}
  */
-@SuppressWarnings("NonJREEmulationClassesInClientCode")
 public class InputListener implements InputProcessor {
 
     private int windowedHeight = -1;
@@ -38,9 +38,9 @@ public class InputListener implements InputProcessor {
         }
         else if (Input.Keys.F == keycode && Gdx.graphics.supportsDisplayModeChange()) {
 
-            if (this.windowedHeight == -1 && this.windowedWidth == -1) {
-                this.windowedHeight = Gdx.graphics.getHeight();
-                this.windowedWidth = Gdx.graphics.getWidth();
+            if (windowedHeight == -1 && windowedWidth == -1) {
+                windowedHeight = Gdx.graphics.getHeight();
+                windowedWidth = Gdx.graphics.getWidth();
             }
 
             if (!Gdx.graphics.isFullscreen()) {
@@ -48,8 +48,8 @@ public class InputListener implements InputProcessor {
                 Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
             }
             else {
-                BnW.updateResolution(this.windowedWidth, this.windowedHeight);
-                Gdx.graphics.setWindowedMode(this.windowedWidth, this.windowedHeight);
+                BnW.updateResolution(windowedWidth, windowedHeight);
+                Gdx.graphics.setWindowedMode(windowedWidth, windowedHeight);
             }
             BnW.getGameHandler().getWorldHandler().centerWorld();
             return true;
@@ -158,8 +158,9 @@ public class InputListener implements InputProcessor {
             return false;
         }
         final Hexagon<HexagonData> hex = HexUtil.getCursorHexagon();
-        if (hex != null) {
-            BnW.getGameHandler().getPlayerHandler().makeMove(hex);
+        PlayerHandler ph = BnW.getGameHandler().getPlayerHandler();
+        if (hex != null && !ph.getCurrentPlayer().isAI()) {
+            ph.makeMove(hex);
             return true;
         }
         return false;

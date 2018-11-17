@@ -24,18 +24,18 @@ public abstract class World {
     }
 
     public HexagonalGrid<HexagonData> getGrid() {
-        if (this.grid == null) {
+        if (grid == null) {
             throw new WorldNotLoadedException();
         }
-        return this.grid;
+        return grid;
     }
 
     public void load() {
         final HexagonalGridBuilder<HexagonData> builder = defaultGridBuilder();
         finalizeGridBuilder(builder);
 
-        builder.setGridHeight(this.getGridRadius());
-        builder.setGridWidth(this.getGridRadius());
+        builder.setGridHeight(getGridRadius());
+        builder.setGridWidth(getGridRadius());
 
         /*
          * Create a standard way of setting the radius of
@@ -44,10 +44,10 @@ public abstract class World {
          *  where this.gridRadius = 7,  then builder radius = 40
          *  where this.gridRadius = 11, then builder radius = 30
          */
-        builder.setRadius(275 * Math.pow(this.getGridRadius(), -0.95));
+        builder.setRadius(275 * Math.pow(getGridRadius(), -0.85));
         System.out.println("builder.getRadius() = " + builder.getRadius());
 
-        this.grid = builder.build();
+        grid = builder.build();
         finalizeWorld();
     }
 
@@ -78,7 +78,7 @@ public abstract class World {
     }
 
     public void unload() {
-        this.grid = null;
+        grid = null;
     }
 
     @Override
@@ -92,11 +92,11 @@ public abstract class World {
 
         final World world = (World) o;
 
-        return this.grid.equals(world.grid);
+        return grid.equals(world.grid);
     }
 
     @Override
     public int hashCode() {
-        return this.grid.hashCode();
+        return grid.hashCode();
     }
 }

@@ -14,7 +14,7 @@ public class Beginner extends World {
 
     @Override
     protected void finalizeWorld() {
-        for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons(this.grid)) {
+        for (final Hexagon<HexagonData> hexagon : HexUtil.getHexagons(grid)) {
             final HexagonData data = HexUtil.getData(hexagon);
             final CubeCoordinate coord = hexagon.getCubeCoordinate();
             final int x = coord.getGridX();
