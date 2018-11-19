@@ -166,7 +166,7 @@ public class PlayerHandler {
     }
 
     /**
-     * Find out which hexagons that should be highlighted
+     * Find out which hexagons should be highlighted
      */
     private void calculateHighlightedHexes() {
         final HashSet<Hexagon<HexagonData>> highlighted = new HashSet<>();
@@ -174,7 +174,7 @@ public class PlayerHandler {
         final HexColor color = getCurrentPlayer().color;
         for (final Hexagon<HexagonData> lhex : HexUtil.getHexagons()) {
             final HexagonData data = HexUtil.getData(lhex);
-            if (data.color == color && !highlighted.contains(lhex)) {
+            if (data.color == color) {
                 highlighted.add(lhex);
             }
         }

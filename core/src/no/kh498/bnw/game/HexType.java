@@ -112,6 +112,10 @@ public enum HexType {
         return levels[this.level + 1];
     }
 
+    public boolean hasNext(){
+        return getNextLevel() != this;
+    }
+
     public void render(final VerticesRenderer verticesRenderer, final HexColor color, final float brightness,
                        final Hexagon<HexagonData> hexagon) {
         final List<Point> points;

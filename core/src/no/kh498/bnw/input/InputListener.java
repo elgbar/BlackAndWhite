@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import no.kh498.bnw.BnW;
+import no.kh498.bnw.game.Player;
 import no.kh498.bnw.game.PlayerHandler;
 import no.kh498.bnw.hexagon.HexagonData;
 import no.kh498.bnw.util.HexUtil;
@@ -161,6 +162,11 @@ public class InputListener implements InputProcessor {
         PlayerHandler ph = BnW.getGameHandler().getPlayerHandler();
         if (hex != null && !ph.getCurrentPlayer().isAI()) {
             ph.makeMove(hex);
+
+            if(ph.getMovesLeft() == 0 || (ph.getMovesLeft() == Player.REINFORCE_COST && ph.getHighlighted().stream().noneMatch(hexagon -> HexUtil.getData(hex).type.hasNext()))){
+                System.out.println("Auto ended with '" + ph.getMovesLeft()+" moves left");
+                ph.endTurn();
+            }
             return true;
         }
         return false;
